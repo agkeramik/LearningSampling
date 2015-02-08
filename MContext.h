@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "Furniture.h"
-#include "MGMM.h"
+#include "mgmm.h"
 #include "Scene.h"
 
 using namespace std;
