@@ -123,9 +123,7 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
             dat=dat.t();
 
             mlpack::gmm::GMM<> gmmBest = getGMM(dat);
-            //std::string gmmFileName=prop.getGMMsFolder()+it->first+".xml";
-
-            //gmmBest.Save(gmmFileName.c_str());
+            model.gmms.insert(std::make_pair(it->first,std::make_pair(gmmBest,it->second)));
         }
     }
     return model;

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project( TestGMM )
-add_executable(prog main.cpp Furniture.cpp mgmm.h  mgmm.cpp properties.cpp properties.h Scene.cpp Global.h  MContext.cpp Sampler.cpp)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+aux_source_directory(. SRC_LIST)
+add_executable(prog ${SRC_LIST})
 include_directories(/usr/include/libxml2)
 target_link_libraries( prog mlpack armadillo CGAL gmp)

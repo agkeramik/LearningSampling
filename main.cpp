@@ -84,7 +84,10 @@ int main(int argc, char* argv[])
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
     Properties prop("properties.txt");
     MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
-    model.print();
+  //  model.print();
+    MGMM model1=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
+    model1.print();
+model1.save("temp/");
 //    cout << f.id << endl;
     return 0;
 }
