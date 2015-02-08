@@ -10,7 +10,7 @@ using namespace std;
 class MContext{
 public:
     map<string, Furniture> library;
-    MGMM mixtures;
+    //MGMM mixtures;
     Scene scene;
     vector<Furniture*> toAdd;
 

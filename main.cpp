@@ -9,6 +9,8 @@
 #include <fstream>
 
 #include "MContext.h"
+#include "mgmm.h"
+#include "properties.h"
 
 using namespace std;
 
@@ -67,12 +69,7 @@ void parseTest(){
         if (p>0 && p < line.size() - 1){
             string key = line.substr(0, p-1);
             string value = line.substr(p+1, line.size()-1);
-
             int s = key.find("#");
-
-
-
-
             cout << key << "," << value << endl;
         }
 
@@ -83,11 +80,12 @@ void parseTest(){
 
 int main(int argc, char* argv[])
 {
-    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
-    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
-    cout << f.id << endl;
-
-    cout << "Hello World!" << endl;
+//    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
+//    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
+    Properties prop("properties.txt");
+    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+    model.print();
+//    cout << f.id << endl;
     return 0;
 }
 

@@ -5,7 +5,7 @@ Furniture MContext::getInstanceOf(string catalogId){
     return this->library[catalogId];
 }
 
-MContext::MContext(string path):mixtures("",""){
+MContext::MContext(string path){
     //todo load shit
     ifstream infile(path.c_str());
 
