@@ -3,13 +3,14 @@
 #include <iostream>
 #include <mlpack/core.hpp>
 #include "Global.h"
+#include <ostream>
 
 class Furniture
 {
 
 public:
 	Furniture();
-	Furniture(int _id, std::string _catalogId);
+    Furniture(int _id, std::string _catalogId);
     Furniture(std::string xmlContent);
 
     Transform rotation;
@@ -41,6 +42,9 @@ public:
 
 	bool collision(Furniture& f);
 
+
 	virtual ~Furniture();
+    void print(std::ostream &out) const;
 };
 
+//std::ostream &operator<<(std::ostream& out, const Funriture &f);

@@ -69,3 +69,18 @@ bool Furniture::collision(Furniture& f){
 Furniture::~Furniture()
 {
 }
+
+void Furniture::print(std::ostream &out) const
+{
+    out<<"<Furniture width=\""<<width<<"\" depth=\""<<depth<<"\" height=\""<<height<<"\" rotation=\""<<features(2)<<"\">\n";
+    out<<"<CatalogId>"<<catalogId<<"</CatalogId>\n";
+    out<<"<Name>"<<name<<"</Name>\n";
+    out<<"<Position posX=\""<<features(0);
+    out<<"\" posY=\""<<features(1)<<"\"/>\n";
+    out<<"</Furniture>\n";
+
+}
+
+//std::ostream &operator<<(std::ostream& out, const Funriture &f){
+//    f.print(out);
+//}
