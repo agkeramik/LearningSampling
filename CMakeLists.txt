@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( TestGMM )
+add_executable( prog main.cpp Furniture.cpp MGMM.cpp Scene.cpp Global.h MContext.cpp Sampler.cpp)
+include_directories(/usr/include/libxml2)
+target_link_libraries( prog mlpack armadillo CGAL gmp)
