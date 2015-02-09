@@ -9,6 +9,7 @@ typedef std::map<std::string,WeightedMixture> GMMMap;
 
 class MGMM
 {
+
     GMMMap gmms;
     static std::map<std::string, double> readF1F2WeightFile(const char * fileName);
     static double calcAIC(int nbGaussians, int nbDimensions, double logLikelihood, double sampleSize);
@@ -16,6 +17,7 @@ class MGMM
     MGMM();
 
 public:
+     static double findGap(arma::vec &t);
     //To be made private
     //MGMM(const char *fileName,const char *directoryOfGMMs);
     static MGMM learnMGMM(const char *fileName,const char *dataDirectory);

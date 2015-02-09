@@ -24,6 +24,20 @@
 #define CreateDir mkdir
 #endif
 
+double MGMM::findGap(arma::vec &t)
+{
+    arma::vec c=arma::sort(t);
+    double dist=-1;
+    unsigned int ind=0;
+    for (unsigned int i=0;i<c.n_rows-1;++i){
+        if((c(i)-c(i+1))*(c(i)-c(i+1))>dist){
+            dist=(c(i)-c(i+1))*(c(i)-c(i+1));
+            ind=i;
+        }
+    }
+    return .5*(c(ind)+c(ind+1));
+}
+
 std::map<std::string, double> MGMM::readF1F2WeightFile(const char *fileName)
 {
         std::ifstream fin;
@@ -63,9 +77,18 @@ mlpack::gmm::GMM<> MGMM::getGMM(arma::mat &A)
 {
     int numDim=A.n_rows;
     int sampleSize = A.n_cols;
+    //find the gap
+    arma::vec theta=A.row(numDim-1).t();
+
+    double gap=MGMM::findGap(theta);
+    std::cout<<gap<<std::endl;
+    for(int i=0;i<A.n_cols;++i)
+        if(A(numDim-1,i)>gap)
+            A(numDim-1,i)-=2.0*arma::datum::pi;
+
+
     double bestAIC = std::numeric_limits<double>::max();
 
-    int bestNumGauss = 1;
     mlpack::gmm::GMM<> gmmBest;
 
     int MAX_GAUSSIANS = 25;
