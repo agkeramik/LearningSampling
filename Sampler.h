@@ -8,11 +8,10 @@ public:
     MContext* context;
 
     Sampler(MContext* context);
-
-    void sample(Furniture* f);
-
-    bool accept(Furniture* f){
-
-    }
-
+    int pickFromCDF(vector<double> &cdf);
+    void transformLocalToGlobal(arma::Col<double> &v, arma::Col<double> &transformed);
+    bool accept(Furniture &f, vector<Furniture*> &furnitures);
+    bool place(Furniture* toPlace);
+    void furnish(vector<Furniture*> &toPlace);
+    void furnish();
 };
