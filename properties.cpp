@@ -17,10 +17,17 @@ Properties::Properties(const char *fileName)
                 gmmsFolder=line.substr(pos+1);
             else if(type.compare("FurnitureCount")==0)
                 furnCount=line.substr(pos+1);
+            else if(type.compare("FurnitureInfo")==0)
+                furnInfo=line.substr(pos+1);
         }
     }
     fin.close();
 
+}
+
+const std::string &Properties::getFurnitureInfo() const
+{
+    return furnInfo;
 }
 
 const std::string &Properties::getFurnitureCount() const

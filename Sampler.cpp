@@ -1,8 +1,11 @@
 #include "Sampler.h"
 #include "Scene.h"
+#include <time.h>
 
 Sampler::Sampler(MContext* context){
     this->context = context;
+
+    srand(time(NULL));
 }
 
 int Sampler::pickFromCDF(vector<double> &cdf){
@@ -27,22 +30,29 @@ void Sampler::transformLocalToGlobal(arma::Col<double> &v, arma::Col<double> &tr
 
 bool Sampler::accept(Furniture &f, vector<Furniture*> &furnitures){
     for (int i = 0; i < furnitures.size(); ++i)
-        if (f.collision(*(furnitures[i])))
+        if (f.collision(*(furnitures[i]))){
+            cout << "\t We have collision between " << f.catalogId << " and " << furnitures[i]->catalogId << endl;
+            cout << "\t\t" << f.getTransformedGeometry() << endl << "\t\t" << furnitures[i]->getTransformedGeometry() << endl;
             return false;
+        }
     return true;
 }
 
 bool Sampler::place(Furniture* toPlace){
-    vector<Furniture*> alreadyPlaced = this->context->scene.furnitures;
+    vector<Furniture*> alreadyPlaced = this->context->scene->furnitures;
     vector<const WeightedMixture*> weightedGMMS;
     vector<double> cdf;
 
     double total = 0;
+
+    cout << ">>>>>>>>>>>>Placing " << toPlace->catalogId << "<<<<<<<<<<<<<" << endl;
+    cout << "\tScene contains " << alreadyPlaced.size() << " furnitures" << endl;
     for (int i = 0; i < alreadyPlaced.size(); ++i){
         const WeightedMixture &wgmm = this->context->mixtures->getMixture(toPlace->catalogId, alreadyPlaced[i]->catalogId);
         total += wgmm.second;
         cdf.push_back(total);
         weightedGMMS.push_back(&wgmm);
+        cout << "\t\tMixture " << toPlace->catalogId << "-" << alreadyPlaced[i]->catalogId << " has a weight of: " << wgmm.second << endl;
     }
 
     int MAX_TRIES = 5;
@@ -50,12 +60,20 @@ bool Sampler::place(Furniture* toPlace){
     bool ok = false;
     int nbTries = 0;
     while (!ok && nbTries <= MAX_TRIES){
+        cout << "\tTry #:" << nbTries << endl;
+
         int choice = pickFromCDF(cdf);
 
+        cout << "\t\tPicked mixture #:" << choice << endl;
+
         arma::Col<double> v = weightedGMMS[choice]->first.Random();
+        cout << "\t\tMixture gave this vector:" << endl << "\t\t" << v <<endl;
+
         Furniture *relativeFurniture = alreadyPlaced[choice];
 
         transformLocalToGlobal(v, relativeFurniture->features);
+        cout << "\t\tTransformation gave this vector:" << endl << "\t\t" << v <<endl;
+
         toPlace->setFeatureVector(v);
 
         ok = accept(*toPlace, alreadyPlaced);
@@ -63,7 +81,7 @@ bool Sampler::place(Furniture* toPlace){
     }
 
     if (ok)
-        this->context->scene.furnitures.push_back(toPlace);
+        this->context->scene->furnitures.push_back(toPlace);
     return ok;
 }
 

@@ -6,7 +6,7 @@ Furniture::Furniture(int _id, std::string _catalogId):id(_id), catalogId(_catalo
 
 Furniture::Furniture() : id(-1), catalogId("uninitialized"), features(3)
 {
-	
+
 }
 
 Furniture::Furniture(std::string xmlContent){
@@ -15,7 +15,8 @@ Furniture::Furniture(std::string xmlContent){
 
 void Furniture::setFeatureVector(arma::Col<double> vec){
     this->features = vec;
-    this->updateGeometry();
+    this->translation = Transform(CGAL::TRANSLATION, Vector(getX(), getY()));
+    this->rotation = Transform(CGAL::ROTATION, cos(getTheta()), sin(getTheta()));
 }
 
 void Furniture::updateGeometry(){
@@ -23,7 +24,7 @@ void Furniture::updateGeometry(){
     this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
     this->centeredGeometry.push_back(Point(width/2.0, -depth/2.0));
     this->centeredGeometry.push_back(Point(width/2.0, depth/2.0));
-    this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
+    this->centeredGeometry.push_back(Point(-width/2.0, depth/2.0));
 }
 
 void Furniture::setWidth(double width){
@@ -59,11 +60,16 @@ void Furniture::setTheta(double theta) {
 }
 
 Polygon Furniture::getTransformedGeometry(){
+    this->updateGeometry();
     return CGAL::transform(this->translation, CGAL::transform(this->rotation, this->centeredGeometry));
 }
 
 bool Furniture::collision(Furniture& f){
-    return CGAL::do_intersect(getTransformedGeometry(), f.getTransformedGeometry());
+    Polygon p1 = f.getTransformedGeometry();
+    Polygon p2 = getTransformedGeometry();
+    //std::cout << p1 << std::endl << p2 << std::endl;
+
+    return CGAL::do_intersect(p1, p2);
 }
 
 Furniture::~Furniture()

@@ -11,10 +11,10 @@ class MContext{
 public:
     map<string, Furniture> library;
     MGMM* mixtures;
-    Scene scene;
+    Scene* scene;
     vector<Furniture*> toAdd;
 
     MContext(string path);
-    Furniture getInstanceOf(string catalogId);
+    Furniture* getInstanceOf(string catalogId);
 
 };

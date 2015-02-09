@@ -8,9 +8,9 @@
 #include <sstream>
 #include <fstream>
 
-#include "MContext.h"
 #include "mgmm.h"
 #include "properties.h"
+#include "Sampler.h"
 
 using namespace std;
 
@@ -78,17 +78,67 @@ void parseTest(){
     infile.close();
 }
 
+
+
+int pickFromCDF(vector<double> &cdf){
+    double total = cdf[cdf.size()-1];
+    double choice = total * (double)std::rand() / RAND_MAX;
+
+    for (int i = 0; i < cdf.size(); ++i)
+        if (choice <= cdf[i])
+            return i;
+    return -1;
+}
+
+void cdfTest(){
+    vector<double> dist;
+    dist.push_back(50);
+    dist.push_back(dist[dist.size()-1] + 20);
+    dist.push_back(dist[dist.size()-1] + 20);
+
+    int v[]={0,0,0};
+
+    for (int i = 0; i < 1000; ++i){
+        ++v[pickFromCDF(dist)];
+    }
+
+    cout << v[0] << ", " << v[1] << ", " << v[2] << endl;
+
+    exit(0);
+}
+
 int main(int argc, char* argv[])
 {
 //    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
+
+    //MGMM model1=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
+
     Properties prop("properties.txt");
     MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
-  //  model.print();
-    MGMM model1=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
-    model1.print();
-model1.save("temp/");
-//    cout << f.id << endl;
+    Scene scene;
+    MContext ctx(prop.getFurnitureInfo().c_str());
+    ctx.mixtures = &model;
+    ctx.scene = &scene;
+
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+
+    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
+    prex->setX(0);
+    prex->setY(0);
+    prex->setTheta(0);
+    ctx.scene->furnitures.push_back(prex);
+
+    Sampler sampler(&ctx);
+    sampler.furnish();
+
+    ofstream outfile("/home/ubuntumachine/createdscene.xml");
+    ctx.scene->print(outfile);
+    outfile.close();
+
     return 0;
 }
 

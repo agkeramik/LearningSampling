@@ -1,8 +1,8 @@
 #include "MContext.h"
 #include <fstream>
 
-Furniture MContext::getInstanceOf(string catalogId){
-    return this->library[catalogId];
+Furniture* MContext::getInstanceOf(string catalogId){
+    return new Furniture(this->library[catalogId]);
 }
 
 MContext::MContext(string path){
@@ -26,9 +26,7 @@ MContext::MContext(string path){
                 if (keyType.compare("id")==0){
                     if (furniture.id!=-1)
                         this->library[furniture.catalogId]=furniture;
-
                     furniture = Furniture(keyId, value);
-
                 }else if (keyType.compare("name")==0){
                     furniture.name = value;
                 }else if (keyType.compare("width")==0){
