@@ -5,10 +5,19 @@ Furniture* MContext::getInstanceOf(string catalogId){
     return new Furniture(this->library[catalogId]);
 }
 
-MContext::MContext(string path){
+void MContext::printLibrary() const
+{
+    for(std::map<std::string,Furniture>::const_iterator it=library.begin();it!=library.end();++it){
+        std::cout<<it->first<<std::endl;
+        it->second.print(std::cout);
+    }
+}
+
+MContext::MContext(const string &path){
     //todo load shit
     ifstream infile(path.c_str());
-
+    if(!infile.is_open())
+        std::cout<<"File not Opened:"+path<<std::endl;
     string line;
     Furniture furniture;
     while (getline(infile, line))
@@ -43,7 +52,6 @@ MContext::MContext(string path){
     //add last one
     if (furniture.id!=-1)
         this->library[furniture.catalogId]=furniture;
-
     infile.close();
 }
 

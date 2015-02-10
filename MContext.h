@@ -14,7 +14,9 @@ public:
     Scene* scene;
     vector<Furniture*> toAdd;
 
-    MContext(string path);
+    MContext(const string &path);
     Furniture* getInstanceOf(string catalogId);
+
+    void printLibrary() const;
 
 };
