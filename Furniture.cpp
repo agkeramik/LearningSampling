@@ -20,11 +20,23 @@ void Furniture::setFeatureVector(arma::Col<double> vec){
 }
 
 void Furniture::updateGeometry(){
+
+
     this->centeredGeometry.clear();
     this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
     this->centeredGeometry.push_back(Point(width/2.0, -depth/2.0));
     this->centeredGeometry.push_back(Point(width/2.0, depth/2.0));
     this->centeredGeometry.push_back(Point(-width/2.0, depth/2.0));
+
+    if (this->centeredGeometry.is_clockwise_oriented()){
+
+        this->centeredGeometry.clear();
+        this->centeredGeometry.push_back(Point(-width/2.0, depth/2.0));
+        this->centeredGeometry.push_back(Point(width/2.0, depth/2.0));
+        this->centeredGeometry.push_back(Point(width/2.0, -depth/2.0));
+        this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
+
+    }
 }
 
 void Furniture::setWidth(double width){
