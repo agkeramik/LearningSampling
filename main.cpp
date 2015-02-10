@@ -118,34 +118,42 @@ int main(int argc, char* argv[])
 //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
 //    model.save(prop.getGMMsFolder().c_str());
 
-    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+//    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
 
-    Scene scene;
-    MContext ctx(prop.getFurnitureInfo().c_str());
-    std::cout<<"Context has benn built\n";
-    ctx.printLibrary();
 
-    ctx.mixtures = &model;
-    ctx.scene = &scene;
+//    Scene scene;
+//    MContext ctx(prop.getFurnitureInfo().c_str());
+//    std::cout<<"Context has benn built\n";
+//    ctx.printLibrary();
 
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+//    ctx.mixtures = &model;
+//    ctx.scene = &scene;
 
-    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
-    prex->setX(0);
-    prex->setY(0);
-    prex->setTheta(0);
-    ctx.scene->furnitures.push_back(prex);
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
 
-    Sampler sampler(&ctx);
-    sampler.furnish();
+//    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
+//    prex->setX(0);
+//    prex->setY(0);
+//    prex->setTheta(0);
+//    ctx.scene->furnitures.push_back(prex);
 
-    ofstream outfile("lala.xml");
-    ctx.scene->print(outfile);
-    outfile.close();
+//    Sampler sampler(&ctx);
+//    sampler.furnish();
 
+//    ofstream outfile("lala.xml");
+//    ctx.scene->print(outfile);
+//    outfile.close();
+
+//    mlpack::gmm::GMM<> gmmdraw;
+//    gmmdraw.Load(prop.getGMMsFolder()+"Renouzate#armchair-Renouzate#sofa2.xml");
+//    arma::mat out(2,1000);
+//    for (int i=0;i<2000;i++){
+//           //out.col(i)=(gmmdraw.Random()).rows(0,1);
+//    }
+   // out.save("armchair-sofa2.dat",arma::raw_ascii);
     return 0;
 }
 
