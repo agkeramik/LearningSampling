@@ -112,12 +112,19 @@ int main(int argc, char* argv[])
 //    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
 
-    //MGMM model1=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
+
 
     Properties prop("properties.txt");
+//    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
+//    model.save(prop.getGMMsFolder().c_str());
+
     MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+
     Scene scene;
     MContext ctx(prop.getFurnitureInfo().c_str());
+    std::cout<<"Context has benn built\n";
+    ctx.printLibrary();
+
     ctx.mixtures = &model;
     ctx.scene = &scene;
 
@@ -135,7 +142,7 @@ int main(int argc, char* argv[])
     Sampler sampler(&ctx);
     sampler.furnish();
 
-    ofstream outfile("/home/ubuntumachine/createdscene.xml");
+    ofstream outfile("lala.xml");
     ctx.scene->print(outfile);
     outfile.close();
 
