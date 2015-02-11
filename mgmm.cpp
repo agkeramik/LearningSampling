@@ -77,16 +77,6 @@ mlpack::gmm::GMM<> MGMM::getGMM(arma::mat &A)
 {
     int numDim=A.n_rows;
     int sampleSize = A.n_cols;
-    //find the gap
-    arma::vec theta=A.row(numDim-1).t();
-
-    double gap=MGMM::findGap(theta);
-    std::cout<<gap<<std::endl;
-    for(int i=0;i<A.n_cols;++i)
-        if(A(numDim-1,i)>gap)
-            A(numDim-1,i)-=2.0*arma::datum::pi;
-
-
     double bestAIC = std::numeric_limits<double>::max();
 
     mlpack::gmm::GMM<> gmmBest;
@@ -144,6 +134,15 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
             arma::mat dat;
             dat.load(dataFileName.c_str());
             dat=dat.t();
+
+            int numDim=dat.n_rows;
+            //find the gap
+            arma::vec theta=dat.row(numDim-1).t();
+            double gap=MGMM::findGap(theta);
+            std::cout<<gap<<std::endl;
+            for(int i=0;i<dat.n_cols;++i)
+                if(dat(numDim-1,i)>gap)
+                    dat(numDim-1,i)-=2.0*arma::datum::pi;
 
             mlpack::gmm::GMM<> gmmBest = getGMM(dat);
             model.gmms.insert(std::make_pair(it->first,std::make_pair(gmmBest,it->second)));

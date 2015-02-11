@@ -11,7 +11,7 @@
 #include "mgmm.h"
 #include "properties.h"
 #include "Sampler.h"
-
+#include "furniturecatalog.h"
 using namespace std;
 
 
@@ -109,48 +109,54 @@ void cdfTest(){
 
 int main(int argc, char* argv[])
 {
+      srand(time(NULL));
 //    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
 
 
 
     Properties prop("properties.txt");
+    FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
+   // cat.print();
+
+    //Before
 //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
 //    model.save(prop.getGMMsFolder().c_str());
 
-    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+//    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
 
-    Scene scene;
-    MContext ctx(prop.getFurnitureInfo().c_str());
-    std::cout<<"Context has benn built\n";
-    ctx.printLibrary();
+//    Scene scene;
+//    MContext ctx(prop.getFurnitureInfo().c_str());
+//    std::cout<<"Context has benn built\n";
+//    ctx.printLibrary();
 
-    ctx.mixtures = &model;
-    ctx.scene = &scene;
-
-
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+//    ctx.mixtures = &model;
+//    ctx.scene = &scene;
 
 
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
 
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
 
-    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
-    prex->setX(0);
-    prex->setY(0);
-    prex->setTheta(0);
-    ctx.scene->furnitures.push_back(prex);
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
 
-    Sampler sampler(&ctx);
-    sampler.furnish();
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
+//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
 
-    ofstream outfile("lala.xml");
-    ctx.scene->print(outfile);
-    outfile.close();
+//    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
+//    prex->setX(0);
+//    prex->setY(0);
+//    prex->setTheta(0);
+//    ctx.scene->furnitures.push_back(prex);
+
+//    Sampler sampler(&ctx);
+//    sampler.furnish();
+
+//    ofstream outfile("lala.xml");
+//    ctx.scene->print(outfile);
+//    outfile.close();
+
 
     return 0;
 }

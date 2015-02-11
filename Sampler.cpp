@@ -5,7 +5,7 @@
 Sampler::Sampler(MContext* context){
     this->context = context;
 
-    srand(time(NULL));
+
 }
 
 int Sampler::pickFromCDF(vector<double> &cdf){
