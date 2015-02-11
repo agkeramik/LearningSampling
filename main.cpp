@@ -128,10 +128,16 @@ int main(int argc, char* argv[])
     ctx.mixtures = &model;
     ctx.scene = &scene;
 
-    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+
     ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+
+
     ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
     ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
+    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
 
     Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
     prex->setX(0);

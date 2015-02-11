@@ -19,13 +19,14 @@ int Sampler::pickFromCDF(vector<double> &cdf){
 }
 
 void Sampler::transformLocalToGlobal(arma::Col<double> &v, arma::Col<double> &transformed){
-    v(0) = v(0)*cos(transformed(2)) - v(1)*sin(transformed(2));
-    v(1) = v(1)*cos(transformed(2)) + v(0)*sin(transformed(2));
+    double x,y;
+    x = v(0)*cos(transformed(2)) - v(1)*sin(transformed(2));
+    y = v(1)*cos(transformed(2)) + v(0)*sin(transformed(2));
 
-    v(0)+=transformed(0);
-    v(1)+=transformed(1);
+    v(0)=transformed(0)+x;
+    v(1)=transformed(1)+y;
 
-    v(2)+=transformed(2);
+    v(2)=transformed(2)+v(2);
 }
 
 bool Sampler::accept(Furniture &f, vector<Furniture*> &furnitures){
