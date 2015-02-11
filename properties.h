@@ -8,6 +8,7 @@ class Properties
     std::string gmmsFolder;
     std::string dataFolder;
     std::string furnInfo;
+    std::string XMLDatabase;
 
 public:
     Properties(const char* fileName);
@@ -15,6 +16,7 @@ public:
     const std::string &getDataFolder() const;
     const std::string &getGMMsFolder() const;
     const std::string &getFurnitureInfo() const;
+    const std::string &getXMLDatabase() const;
 };
 
 #endif // PROPERTIES_H

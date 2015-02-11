@@ -12,35 +12,36 @@
 #include "properties.h"
 #include "Sampler.h"
 #include "furniturecatalog.h"
+#include "database.h"
 using namespace std;
 
 
-void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-  printf("Beginning of element : %s \n", name);
-  while (NULL != attrs && NULL != attrs[0]) {
-    printf("attribute: %s=%s\n",attrs[0],attrs[1]);
-    attrs = &attrs[2];
-  }
-}
+//void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
+//  printf("Beginning of element : %s \n", name);
+//  while (NULL != attrs && NULL != attrs[0]) {
+//    printf("attribute: %s=%s\n",attrs[0],attrs[1]);
+//    attrs = &attrs[2];
+//  }
+//}
 
 
-void xmlTest(){
-    const char* xml_path = "/home/ubuntumachine/hello_world.xml";
+//void xmlTest(){
+//    const char* xml_path = "lala.xml";
 
-    xmlSAXHandler sh = {0};
-    sh.startElement = start_element_callback;
-    xmlParserCtxtPtr ctxt;
+//    xmlSAXHandler sh = {0};
+//    sh.startElement = start_element_callback;
+//    xmlParserCtxtPtr ctxt;
 
-    if ((ctxt = xmlCreateFileParserCtxt(xml_path)) == NULL) {
-        fprintf(stderr, "Erreur lors de la création du contexte\n");
-        return;
-      }
-      // register sax handler with the context
-      ctxt->sax = &sh;
+//    if ((ctxt = xmlCreateFileParserCtxt(xml_path)) == NULL) {
+//        fprintf(stderr, "Erreur lors de la création du contexte\n");
+//        return;
+//      }
+//      // register sax handler with the context
+//      ctxt->sax = &sh;
 
-      // parse the doc
-      xmlParseDocument(ctxt);
-}
+//      // parse the doc
+//      xmlParseDocument(ctxt);
+//}
 
 void geoTest(){
         Point points[] = { Point(0,0), Point(5.1,0), Point(1,1), Point(0.5,6)};
@@ -120,6 +121,9 @@ int main(int argc, char* argv[])
    // cat.print();
     Furniture f =cat.getNewFurniture("Renouzate#sofa2");
     f.print(std::cout);
+    Database db(prop.getXMLDatabase().c_str());
+    db.print();
+
     //Before
 //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
 //    model.save(prop.getGMMsFolder().c_str());
