@@ -10,6 +10,7 @@ class FurnitureCatalog
     std::map<std::string,Furniture> catalog;
 public:
     FurnitureCatalog(const char *catalogFileName);
+    Furniture getNewFurniture(const std::string &catalogId) const;
     void print() const;
 };
 

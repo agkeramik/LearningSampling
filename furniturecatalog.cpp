@@ -44,6 +44,11 @@ FurnitureCatalog::FurnitureCatalog(const char *catalogFileName)
     infile.close();
 }
 
+Furniture FurnitureCatalog::getNewFurniture(const std::string &catalogId) const
+{
+    return catalog.find(catalogId)->second;
+}
+
 void FurnitureCatalog::print() const
 {
     for(std::map<std::string,Furniture>::const_iterator it=catalog.begin();it!=catalog.end();++it){

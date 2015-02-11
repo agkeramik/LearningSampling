@@ -2,11 +2,10 @@
 
 Furniture::Furniture(int _id, std::string _catalogId):id(_id), catalogId(_catalogId), features(3)
 {
-}
-
-Furniture::Furniture() : id(-1), catalogId("uninitialized"), features(3)
-{
-
+    depth=10;
+    width=10;
+    height=10;
+    this->updateGeometry();
 }
 
 Furniture::Furniture(std::string xmlContent){

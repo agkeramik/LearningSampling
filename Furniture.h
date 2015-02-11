@@ -9,8 +9,7 @@ class Furniture
 {
 
 public:
-	Furniture();
-    Furniture(int _id, std::string _catalogId);
+    Furniture(int _id=-1, std::string _catalogId="unitialized");
     Furniture(std::string xmlContent);
 
     Transform rotation;

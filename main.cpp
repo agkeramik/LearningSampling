@@ -118,7 +118,8 @@ int main(int argc, char* argv[])
     Properties prop("properties.txt");
     FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
    // cat.print();
-
+    Furniture f =cat.getNewFurniture("Renouzate#sofa2");
+    f.print(std::cout);
     //Before
 //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
 //    model.save(prop.getGMMsFolder().c_str());
