@@ -1,5 +1,5 @@
 #include "database.h"
-#include <pugixml.hpp>
+#include <pugixml/pugixml.hpp>
 
 using namespace pugi;
 

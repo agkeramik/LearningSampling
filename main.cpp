@@ -11,8 +11,12 @@
 #include "mgmm.h"
 #include "properties.h"
 #include "Sampler.h"
+#include "MGSampler.h"
 #include "furniturecatalog.h"
 #include "database.h"
+
+
+#include "Context.h"
 using namespace std;
 
 
@@ -115,14 +119,31 @@ int main(int argc, char* argv[])
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
 
 
+      Context ctx("properties.txt");
+      ctx.addFurnitureToList("Renouzate#sofa2");
+      ctx.addFurnitureToList("Renouzate#Table2x2");
+      ctx.addFurnitureToList("Renouzate#armchair");
+      ctx.addFurnitureToList("Renouzate#armchair");
+      ctx.addFurnitureToList("Renouzate#Table1x1");
 
-    Properties prop("properties.txt");
-    FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
-   // cat.print();
-    Furniture f =cat.getNewFurniture("Renouzate#sofa2");
-    f.print(std::cout);
-    Database db(prop.getXMLDatabase().c_str());
-    db.print();
+      Furniture prex = ctx.catalog->getNewFurniture("Renouzate#sofa2");
+      prex.setX(0);
+      prex.setY(0);
+      prex.setTheta(0);
+      ctx.room->addFurniture(prex);
+
+      Sampler *sampler = new MGSampler(&ctx);
+      sampler->furnish();
+      delete sampler;
+
+
+//    Properties prop("properties.txt");
+//    FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
+//   // cat.print();
+//    Furniture f =cat.getNewFurniture("Renouzate#sofa2");
+//    f.print(std::cout);
+//    Database db(prop.getXMLDatabase().c_str());
+//    db.print();
 
     //Before
 //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());

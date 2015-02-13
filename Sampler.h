@@ -1,17 +1,23 @@
-#include "MContext.h"
+#ifndef SAMPLER_H
+#define SAMPLER_H
+
+#include "Context.h"
+#include "Furniture.h"
 #include <vector>
 
 using namespace std;
 
 class Sampler{
 public:
-    MContext* context;
+    Context *context;
+	int MAX_TRIES;
 
-    Sampler(MContext* context);
-    int pickFromCDF(vector<double> &cdf);
-    void transformLocalToGlobal(arma::Col<double> &v, arma::Col<double> &transformed);
-    bool accept(Furniture &f, vector<Furniture*> &furnitures);
-    bool place(Furniture* toPlace);
-    void furnish(vector<Furniture*> &toPlace);
-    void furnish();
+    Sampler(Context *context);
+	virtual bool place(Furniture &toPlace) = 0;
+    virtual bool accept(Furniture &toPlace, vector<Furniture*> &furnitures) = 0;
+	virtual void furnish(vector<Furniture*> &toPlace) = 0;
+	virtual void furnish() = 0;
+	virtual ~Sampler();
 };
+
+#endif

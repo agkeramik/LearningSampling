@@ -7,11 +7,11 @@
 #include "Furniture.h"
 class Room
 {
-    std::vector<Furniture> furnitures;
+    std::vector<Furniture*> furnitures;
 
 public:
     Room();
-    const std::vector<Furniture>  &getFurnitures() const;
+    const std::vector<Furniture*>  &getFurnitures() const;
     void addFurniture(Furniture &f);
     void print(std::ostream &out) const;
     virtual ~Room();
