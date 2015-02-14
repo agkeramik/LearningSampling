@@ -21,7 +21,7 @@ public:
     //To be made private
     //MGMM(const char *fileName,const char *directoryOfGMMs);
     static MGMM learnMGMM(const char *fileName,const char *dataDirectory);
-    static MGMM *loadMGMM(const char *fileName, const char *directoryOfGMMs);
+    static MGMM loadMGMM(const char *fileName, const char *directoryOfGMMs);
     const WeightedMixture &getMixture(std::string fur1,std::string givenfur2) const;
     void save(const char *directory) const;
     void print() const;

@@ -151,9 +151,9 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
     return model;
 }
 
-MGMM *MGMM::loadMGMM(const char *fileName, const char *directoryOfGMMs)
+MGMM MGMM::loadMGMM(const char *fileName, const char *directoryOfGMMs)
 {
-    MGMM *model = new MGMM();
+    MGMM model;
     const std::map<std::string,double> &list=MGMM::readF1F2WeightFile(fileName);
     for (std::map<std::string,double>::const_iterator it=list.begin();it!=list.end();++it){
         mlpack::gmm::GMM<> gmm;
@@ -162,7 +162,7 @@ MGMM *MGMM::loadMGMM(const char *fileName, const char *directoryOfGMMs)
             s=s+"/"+it->first+".xml";
             gmm.Load(s.c_str());
         }
-        model->gmms.insert(std::make_pair(it->first,std::make_pair(gmm,it->second)));
+        model.gmms.insert(std::make_pair(it->first,std::make_pair(gmm,it->second)));
     }
     return model;
 }

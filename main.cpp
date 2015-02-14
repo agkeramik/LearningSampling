@@ -119,18 +119,21 @@ int main(int argc, char* argv[])
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
 
 
-      Context ctx("properties.txt");
+      Properties prop("properties.txt");
+
+      //Context ctx = Context::createContext("properties.txt");
+      Context ctx(prop);
       ctx.addFurnitureToList("Renouzate#sofa2");
       ctx.addFurnitureToList("Renouzate#Table2x2");
       ctx.addFurnitureToList("Renouzate#armchair");
       ctx.addFurnitureToList("Renouzate#armchair");
       ctx.addFurnitureToList("Renouzate#Table1x1");
 
-      Furniture prex = ctx.catalog->getNewFurniture("Renouzate#sofa2");
+      Furniture prex = ctx.catalog.getNewFurniture("Renouzate#sofa2");
       prex.setX(0);
       prex.setY(0);
       prex.setTheta(0);
-      ctx.room->addFurniture(prex);
+      ctx.room.addFurniture(prex);
 
       Sampler *sampler = new MGSampler(&ctx);
       sampler->furnish();
