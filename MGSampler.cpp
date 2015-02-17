@@ -33,10 +33,11 @@ void MGSampler::transformLocalToGlobal(arma::Col<double> &v, const arma::Col<dou
 }
 
 bool MGSampler::accept(Furniture &f, vector<Furniture*> &furnitures){
+    DEBUG( "\tAccept Condition For:\n\t\t");DEBUG_LINE(f.getTransformedGeometry());
     for (int i = 0; i < furnitures.size(); ++i)
         if (f.collision(*(furnitures[i]))){
             DEBUG( "\t We have collision between ");DEBUG(f.catalogId);DEBUG(" and ");DEBUG_LINE(furnitures[i]->catalogId);
-            DEBUG( "\t\t");DEBUG_LINE(f.getTransformedGeometry());DEBUG("\t\t");DEBUG_LINE(furnitures[i]->getTransformedGeometry());
+            DEBUG("\t\t");DEBUG_LINE(furnitures[i]->getTransformedGeometry());
             return false;
         }
     return true;

@@ -7,6 +7,7 @@
 #include "mgmm.h"
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -20,7 +21,8 @@ public:
 
     Context(Properties &p);
     Context(Room &_room, FurnitureCatalog &_catalog, MGMM &_mixtures);
-    void addFurnitureToList(const char* catalogId);
+    void addFurnitureToList(const char *catalogId);
+    void addFurnituresFromFile(const char *filePath);
     void printLibrary() const;
 	virtual ~Context();
 };

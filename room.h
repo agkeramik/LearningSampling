@@ -14,6 +14,7 @@ public:
     const std::vector<Furniture*>  &getFurnitures() const;
     void addFurniture(Furniture &f);
     void print(std::ostream &out) const;
+    void print(std::ostream &out, double xo, double yo);
     virtual ~Room();
 };
 

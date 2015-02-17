@@ -15,7 +15,7 @@ Furniture::Furniture(std::string xmlContent){
 void Furniture::setFeatureVector(arma::Col<double> vec){
     this->features = vec;
     this->translation = Transform(CGAL::TRANSLATION, Vector(getX(), getY()));
-    this->rotation = Transform(CGAL::ROTATION, cos(getTheta()), sin(getTheta()));
+    this->rotation = Transform(CGAL::ROTATION, sin(getTheta()), cos(getTheta()));
 }
 
 void Furniture::updateGeometry(){
@@ -67,7 +67,7 @@ void Furniture::setY(double y) {
 }
 void Furniture::setTheta(double theta) {
     this->features(2) = theta;
-    this->rotation = Transform(CGAL::ROTATION, cos(theta), sin(theta));
+    this->rotation = Transform(CGAL::ROTATION, sin(theta), cos(theta));
 }
 
 Polygon Furniture::getTransformedGeometry(){

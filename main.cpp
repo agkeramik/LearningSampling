@@ -112,80 +112,111 @@ void cdfTest(){
     exit(0);
 }
 
+
+void old(){
+    //    Properties prop("properties.txt");
+    //    FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
+    //   // cat.print();
+    //    Furniture f =cat.getNewFurniture("Renouzate#sofa2");
+    //    f.print(std::cout);
+    //    Database db(prop.getXMLDatabase().c_str());
+    //    db.print();
+
+        //Before
+    //    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
+    //    model.save(prop.getGMMsFolder().c_str());
+
+    //    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+
+    //    Scene scene;
+    //    MContext ctx(prop.getFurnitureInfo().c_str());
+    //    std::cout<<"Context has benn built\n";
+    //    ctx.printLibrary();
+
+    //    ctx.mixtures = &model;
+    //    ctx.scene = &scene;
+
+
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+
+
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
+
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
+    //    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
+
+    //    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
+    //    prex->setX(0);
+    //    prex->setY(0);
+    //    prex->setTheta(0);
+    //    ctx.scene->furnitures.push_back(prex);
+
+    //    Sampler sampler(&ctx);
+    //    sampler.furnish();
+
+    //    ofstream outfile("lala.xml");
+    //    ctx.scene->print(outfile);
+    //    outfile.close();
+}
+
 int main(int argc, char* argv[])
 {
       srand(time(NULL));
-//    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
-//    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
 
+
+      int samples = 1;
+      if (argc > 1)
+          samples = atoi(argv[1]);
 
       Properties prop("properties.txt");
 
-      //Context ctx = Context::createContext("properties.txt");
-      Context ctx(prop);
-      ctx.addFurnitureToList("Renouzate#sofa2");
-      ctx.addFurnitureToList("Renouzate#Table2x2");
-      ctx.addFurnitureToList("Renouzate#armchair");
-      ctx.addFurnitureToList("Renouzate#armchair");
-      ctx.addFurnitureToList("Renouzate#Table1x1");
+      ofstream outputFile("output_all.xml");
 
-      Furniture prex = ctx.catalog.getNewFurniture("Renouzate#sofa2");
-      prex.setX(0);
-      prex.setY(0);
-      prex.setTheta(0);
-      ctx.room.addFurniture(prex);
+      outputFile<<"<Room>\n";
+      outputFile<<"<Furnitures>\n";
 
-      Sampler *sampler = new MGSampler(&ctx);
-      sampler->furnish();
-      delete sampler;
+      for (int i = 0; i < samples; ++i){
 
+          Context ctx(prop);
 
-//    Properties prop("properties.txt");
-//    FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
-//   // cat.print();
-//    Furniture f =cat.getNewFurniture("Renouzate#sofa2");
-//    f.print(std::cout);
-//    Database db(prop.getXMLDatabase().c_str());
-//    db.print();
+          if (argc < 3){
+              ctx.addFurnitureToList("Renouzate#sofa2");
+              ctx.addFurnitureToList("Renouzate#Table2x2");
+              ctx.addFurnitureToList("Renouzate#armchair");
+              ctx.addFurnitureToList("Renouzate#armchair");
+              ctx.addFurnitureToList("Renouzate#Table1x1");
+          }else{
+              ctx.addFurnituresFromFile(argv[2]);
+          }
 
-    //Before
-//    MGMM model=MGMM::learnMGMM(prop.getFurnitureCount().c_str(),prop.getDataFolder().c_str());
-//    model.save(prop.getGMMsFolder().c_str());
+          Furniture prex = ctx.catalog.getNewFurniture("Renouzate#sofa2");
+          prex.setX(0);
+          prex.setY(0);
+          prex.setTheta(0);
+          ctx.room.addFurniture(prex);
 
-//    MGMM model=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+          Sampler *sampler = new MGSampler(&ctx);
+          sampler->furnish();
+          delete sampler;
 
-//    Scene scene;
-//    MContext ctx(prop.getFurnitureInfo().c_str());
-//    std::cout<<"Context has benn built\n";
-//    ctx.printLibrary();
+          stringstream fileName;
+          fileName << "output/layout_" << i << ".xml";
 
-//    ctx.mixtures = &model;
-//    ctx.scene = &scene;
+            int w = sqrt(samples);
+            int x = i % w;
+            int y = i / w;
 
+          //ofstream outputFile(fileName.str().c_str());
+          ctx.room.print(outputFile, x * 700, y * 700);
+          //outputFile.close();
 
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#sofa2"));
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table2x2"));
+      }
+      outputFile<<"</Furnitures>\n";
+      outputFile<<"</Room>\n";
 
-
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#armchair"));
-
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
-//    ctx.toAdd.push_back(ctx.getInstanceOf("Renouzate#Table1x1"));
-
-//    Furniture *prex = ctx.getInstanceOf("Renouzate#sofa2");
-//    prex->setX(0);
-//    prex->setY(0);
-//    prex->setTheta(0);
-//    ctx.scene->furnitures.push_back(prex);
-
-//    Sampler sampler(&ctx);
-//    sampler.furnish();
-
-//    ofstream outfile("lala.xml");
-//    ctx.scene->print(outfile);
-//    outfile.close();
-
+      outputFile.close();
 
     return 0;
 }

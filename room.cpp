@@ -26,9 +26,17 @@ void Room::print(std::ostream &out) const
     out<<"</Room>\n";
 }
 
+void Room::print(std::ostream &out, double xo, double yo){
+
+    for (int i=0;i<furnitures.size();++i){
+        Furniture f = *(furnitures[i]);
+        f.setX(f.getX()+xo);
+        f.setY(f.getY()+yo);
+        f.print(out);
+    }
+
+}
+
 Room::~Room()
 {
-//    for (int i = 0; i < this->furnitures.size(); ++i)
-//        delete this->furnitures[i];
-//    std::cout << "room delete" << std::endl;
 }

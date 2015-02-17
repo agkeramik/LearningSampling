@@ -1,7 +1,7 @@
 #include "Sampler.h"
 
 
-Sampler::Sampler(Context *context) :MAX_TRIES(5)
+Sampler::Sampler(Context *context) :MAX_TRIES(15)
 {
     this->context = context;
 }
