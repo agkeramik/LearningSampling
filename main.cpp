@@ -161,62 +161,94 @@ void old(){
     //    outfile.close();
 }
 
+void furnish(int argc, char* argv[]){
+    srand(time(NULL));
+
+
+    int samples = 1;
+    if (argc > 1)
+        samples = atoi(argv[1]);
+
+    Properties prop("properties.txt");
+
+    ofstream outputFile("output_all.xml");
+
+    outputFile<<"<Room>\n";
+    outputFile<<"<Furnitures>\n";
+
+    for (int i = 0; i < samples; ++i){
+
+        Context ctx(prop);
+
+        if (argc < 3){
+            ctx.addFurnitureToList("Renouzate#sofa2");
+            ctx.addFurnitureToList("Renouzate#Table2x2");
+            ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#Table1x1");
+        }else{
+            ctx.addFurnituresFromFile(argv[2]);
+        }
+
+        Furniture prex = ctx.catalog.getNewFurniture("Renouzate#sofa2");
+        prex.setX(0);
+        prex.setY(0);
+        prex.setTheta(0);
+        ctx.room.addFurniture(prex);
+
+        Sampler *sampler = new MGSampler(&ctx);
+        sampler->furnish();
+        delete sampler;
+
+        stringstream fileName;
+        fileName << "output/layout_" << i << ".xml";
+
+          int w = sqrt(samples);
+          int x = i % w;
+          int y = i / w;
+
+        //ofstream outputFile(fileName.str().c_str());
+        ctx.room.print(outputFile, x * 700, y * 700);
+        //outputFile.close();
+
+    }
+    outputFile<<"</Furnitures>\n";
+    outputFile<<"</Room>\n";
+
+    outputFile.close();
+
+}
+
+
+
+
+void experiment(){
+        Point points[] = { Point(0,0), Point(0,1), Point(-1,1), Point(-1,0)};
+        Polygon pgn(points, points+4);
+
+        Point points2[] = { Point(-0.5,0),  Point(10,0), Point(10,1), Point(-0.5,10)};
+        Polygon pgn2(points2, points2+4);
+
+        std::cout << "Intersection area is: " << Global::intersectionArea(pgn, pgn2) << " when it should be " << 0.5 << std::endl;
+
+
+        Point points3[] = { Point(0,0), Point(0,1), Point(-1,1), Point(-1,0)};
+        Polygon pg3(points3, points3+4);
+
+        Point points4[] = { Point(5,0),  Point(10,0), Point(10,1), Point(5,1)};
+        Polygon pgn4(points4, points4+4);
+
+        std::cout << "Distance is: " << Global::distance(pg3, pgn4) << " when it should be " << 5 << std::endl;
+
+        Vector v(0,1);
+        Vector w(0.5,0.5);
+
+        std::cout << "Angle is : " << Global::angle(v,w) << " when it should be " << 3.14/4.0 << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
-      srand(time(NULL));
-
-
-      int samples = 1;
-      if (argc > 1)
-          samples = atoi(argv[1]);
-
-      Properties prop("properties.txt");
-
-      ofstream outputFile("output_all.xml");
-
-      outputFile<<"<Room>\n";
-      outputFile<<"<Furnitures>\n";
-
-      for (int i = 0; i < samples; ++i){
-
-          Context ctx(prop);
-
-          if (argc < 3){
-              ctx.addFurnitureToList("Renouzate#sofa2");
-              ctx.addFurnitureToList("Renouzate#Table2x2");
-              ctx.addFurnitureToList("Renouzate#armchair");
-              ctx.addFurnitureToList("Renouzate#armchair");
-              ctx.addFurnitureToList("Renouzate#Table1x1");
-          }else{
-              ctx.addFurnituresFromFile(argv[2]);
-          }
-
-          Furniture prex = ctx.catalog.getNewFurniture("Renouzate#sofa2");
-          prex.setX(0);
-          prex.setY(0);
-          prex.setTheta(0);
-          ctx.room.addFurniture(prex);
-
-          Sampler *sampler = new MGSampler(&ctx);
-          sampler->furnish();
-          delete sampler;
-
-          stringstream fileName;
-          fileName << "output/layout_" << i << ".xml";
-
-            int w = sqrt(samples);
-            int x = i % w;
-            int y = i / w;
-
-          //ofstream outputFile(fileName.str().c_str());
-          ctx.room.print(outputFile, x * 700, y * 700);
-          //outputFile.close();
-
-      }
-      outputFile<<"</Furnitures>\n";
-      outputFile<<"</Room>\n";
-
-      outputFile.close();
-
+    experiment();
     return 0;
 }
+
