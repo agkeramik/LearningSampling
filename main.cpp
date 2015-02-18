@@ -13,35 +13,8 @@
 #include "Sampler.h"
 #include "furniturecatalog.h"
 #include "database.h"
+
 using namespace std;
-
-
-//void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
-//  printf("Beginning of element : %s \n", name);
-//  while (NULL != attrs && NULL != attrs[0]) {
-//    printf("attribute: %s=%s\n",attrs[0],attrs[1]);
-//    attrs = &attrs[2];
-//  }
-//}
-
-
-//void xmlTest(){
-//    const char* xml_path = "lala.xml";
-
-//    xmlSAXHandler sh = {0};
-//    sh.startElement = start_element_callback;
-//    xmlParserCtxtPtr ctxt;
-
-//    if ((ctxt = xmlCreateFileParserCtxt(xml_path)) == NULL) {
-//        fprintf(stderr, "Erreur lors de la création du contexte\n");
-//        return;
-//      }
-//      // register sax handler with the context
-//      ctxt->sax = &sh;
-
-//      // parse the doc
-//      xmlParseDocument(ctxt);
-//}
 
 void geoTest(){
         Point points[] = { Point(0,0), Point(5.1,0), Point(1,1), Point(0.5,6)};
@@ -113,9 +86,6 @@ int main(int argc, char* argv[])
       srand(time(NULL));
 //    MContext ctx("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
 //    Furniture f = ctx.getInstanceOf("Renouzate#Table2x1");
-
-
-
     Properties prop("properties.txt");
     FurnitureCatalog cat(prop.getFurnitureInfo().c_str());
    // cat.print();
@@ -161,7 +131,5 @@ int main(int argc, char* argv[])
 //    ofstream outfile("lala.xml");
 //    ctx.scene->print(outfile);
 //    outfile.close();
-
-
     return 0;
 }

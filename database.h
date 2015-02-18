@@ -6,8 +6,6 @@
 
 class Database
 {
-    Room* currentRoom;
-    Furniture* currentFurniture;
     std::vector<Room> rooms;
 public:
     Database(const char *xmlFileName);
