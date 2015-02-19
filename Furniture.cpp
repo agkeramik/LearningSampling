@@ -8,47 +8,56 @@ Furniture::Furniture(int _id, std::string _catalogId):id(_id), catalogId(_catalo
     this->updateGeometry();
 }
 
-Furniture::Furniture(std::string xmlContent){
+Furniture::Furniture(std::string xmlContent)
+{
 
 }
 
-void Furniture::setFeatureVector(arma::Col<double> vec){
+void Furniture::setFeatureVector(arma::Col<double> vec)
+{
     this->features = vec;
     this->translation = Transform(CGAL::TRANSLATION, Vector(getX(), getY()));
-    this->rotation = Transform(CGAL::ROTATION, cos(getTheta()), sin(getTheta()));
+    this->rotation = Transform(CGAL::ROTATION, sin(getTheta()), cos(getTheta()));
 }
 
-void Furniture::updateGeometry(){
+void Furniture::updateGeometry()
+{
 
-
+    double virDepth=depth;
+    if(catalogId=="eTeks#door" || catalogId=="eTeks#doubleFrenchWindow126x200" ||
+            catalogId=="eTeks#frenchWindow85x200")
+        virDepth=width;
     this->centeredGeometry.clear();
-    this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
-    this->centeredGeometry.push_back(Point(width/2.0, -depth/2.0));
-    this->centeredGeometry.push_back(Point(width/2.0, depth/2.0));
-    this->centeredGeometry.push_back(Point(-width/2.0, depth/2.0));
+    this->centeredGeometry.push_back(Point(-width/2.0, -virDepth/2.0));
+    this->centeredGeometry.push_back(Point(width/2.0, -virDepth/2.0));
+    this->centeredGeometry.push_back(Point(width/2.0, virDepth/2.0));
+    this->centeredGeometry.push_back(Point(-width/2.0, virDepth/2.0));
 
     if (this->centeredGeometry.is_clockwise_oriented()){
 
         this->centeredGeometry.clear();
-        this->centeredGeometry.push_back(Point(-width/2.0, depth/2.0));
-        this->centeredGeometry.push_back(Point(width/2.0, depth/2.0));
-        this->centeredGeometry.push_back(Point(width/2.0, -depth/2.0));
-        this->centeredGeometry.push_back(Point(-width/2.0, -depth/2.0));
+        this->centeredGeometry.push_back(Point(-width/2.0, virDepth/2.0));
+        this->centeredGeometry.push_back(Point(width/2.0, virDepth/2.0));
+        this->centeredGeometry.push_back(Point(width/2.0, -virDepth/2.0));
+        this->centeredGeometry.push_back(Point(-width/2.0, -virDepth/2.0));
 
     }
 }
 
-void Furniture::setWidth(double width){
+void Furniture::setWidth(double width)
+{
     this->width = width;
     this->updateGeometry();
 }
 
-void Furniture::setHeight(double height){
+void Furniture::setHeight(double height)
+{
     this->height = height;
     this->updateGeometry();
 }
 
-void Furniture::setDepth(double depth){
+void Furniture::setDepth(double depth)
+{
     this->depth = depth;
     this->updateGeometry();
 }
@@ -57,25 +66,29 @@ double Furniture::getX() { return this->features.at(0); }
 double Furniture::getY() { return this->features.at(1); }
 double Furniture::getTheta() { return this->features.at(2); }
 
-void Furniture::setX(double x) {
+void Furniture::setX(double x)
+{
     this->features(0) = x;
     this->translation = Transform(CGAL::TRANSLATION, Vector(getX(), getY()));
 }
-void Furniture::setY(double y) {
+void Furniture::setY(double y)
+{
     this->features(1) = y;
     this->translation = Transform(CGAL::TRANSLATION, Vector(getX(), getY()));
 }
-void Furniture::setTheta(double theta) {
+void Furniture::setTheta(double theta)
+{
     this->features(2) = theta;
-    this->rotation = Transform(CGAL::ROTATION, cos(theta), sin(theta));
+    this->rotation = Transform(CGAL::ROTATION, sin(theta), cos(theta));
 }
 
-Polygon Furniture::getTransformedGeometry(){
-    this->updateGeometry();
+Polygon Furniture::getTransformedGeometry() const
+{
     return CGAL::transform(this->translation, CGAL::transform(this->rotation, this->centeredGeometry));
 }
 
-bool Furniture::collision(Furniture& f){
+bool Furniture::collision(const Furniture &f) const
+{
     Polygon p1 = f.getTransformedGeometry();
     Polygon p2 = getTransformedGeometry();
     //std::cout << p1 << std::endl << p2 << std::endl;

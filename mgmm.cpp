@@ -154,7 +154,6 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
 MGMM MGMM::loadMGMM(const char *fileName, const char *directoryOfGMMs)
 {
     MGMM model;
-    std::ifstream fin;
     const std::map<std::string,double> &list=MGMM::readF1F2WeightFile(fileName);
     for (std::map<std::string,double>::const_iterator it=list.begin();it!=list.end();++it){
         mlpack::gmm::GMM<> gmm;

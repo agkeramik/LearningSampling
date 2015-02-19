@@ -68,7 +68,7 @@ unsigned int Database::nb_rooms() const
     return rooms.size();
 }
 
-const Room &Database::room(int i) const
+const Room &Database::room(unsigned int i) const
 {
     if(i<rooms.size())
         return rooms[i];
@@ -77,7 +77,7 @@ const Room &Database::room(int i) const
 
 void Database::print() const
 {
-    for(int i=0;i<rooms.size();++i){
+    for(unsigned int i=0;i<rooms.size();++i){
         rooms[i].print(std::cout);
     }
 }

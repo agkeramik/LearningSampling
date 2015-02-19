@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include <iostream>
+#ifndef FURNITURE_H
+#define FURNITURE_H
+
 #include <mlpack/core.hpp>
 #include "Global.h"
 #include <ostream>
@@ -37,9 +40,9 @@ public:
     void setHeight(double height);
     void setDepth(double depth);
 
-    Polygon getTransformedGeometry();
+    Polygon getTransformedGeometry() const;
 
-	bool collision(Furniture& f);
+    bool collision(const Furniture &f) const;
 
 
 	virtual ~Furniture();
@@ -47,3 +50,5 @@ public:
 };
 
 //std::ostream &operator<<(std::ostream& out, const Funriture &f);
+
+#endif
