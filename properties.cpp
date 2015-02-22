@@ -8,7 +8,7 @@ Properties::Properties(const char *fileName)
     fin.open(fileName);
     std::string line;
     while(std::getline(fin,line)>0){
-        int pos=line.find('=');
+        unsigned int pos=line.find('=');
         if(pos!=std::string::npos){
             std::string type=line.substr(0,pos);
             if(type.compare("DataFolder")==0)

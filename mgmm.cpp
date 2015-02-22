@@ -140,7 +140,7 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
             arma::vec theta=dat.row(numDim-1).t();
             double gap=MGMM::findGap(theta);
             std::cout<<gap<<std::endl;
-            for(int i=0;i<dat.n_cols;++i)
+            for(unsigned int i=0;i<dat.n_cols;++i)
                 if(dat(numDim-1,i)>gap)
                     dat(numDim-1,i)-=2.0*arma::datum::pi;
 
@@ -192,7 +192,7 @@ void MGMM::print() const
     for(GMMMap::const_iterator it=gmms.begin();it!=gmms.end();++it){
             std::cout<<it->first<<"   weight: "<<it->second.second<<std::endl;
             mlpack::gmm::GMM<> gmmBest=it->second.first;
-            for(int n = 0; n < gmmBest.Gaussians(); ++n)
+            for(unsigned int n = 0; n < gmmBest.Gaussians(); ++n)
             {
                 std::cout << "mean[" << n << "] = " << gmmBest.Means()[n].t();
                 std::cout << "cov.[" << n << "] = " << gmmBest.Covariances()[n].t();
