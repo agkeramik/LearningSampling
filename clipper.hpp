@@ -192,7 +192,9 @@ void ReversePath(Path& p);
 void ReversePaths(Paths& p);
 
 double DistanceFromSegmentSqrd(const IntPoint &seg1, const IntPoint &seg2, const IntPoint &p);
-double MinimumDistance(const Path &p1, const Path &p2);
+double MinimumDistanceBFSqrd(const Path &p1, const Path &p2);
+double MinimumDistanceCalipersSqrd(const Path &p1, const Path &p2);
+double DistanceSegmentSegmentSqrd(const IntPoint &seg1p1,const IntPoint &seg1p2,const IntPoint &seg2p1,const IntPoint &seg2p2);
 
 struct IntRect { cInt left; cInt top; cInt right; cInt bottom; };
 

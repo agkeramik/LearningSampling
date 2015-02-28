@@ -49,6 +49,8 @@
 #include <functional>
 #include <limits>
 
+#include <iostream>
+
 namespace ClipperLib {
 
 static double const pi = 3.141592653589793238;
@@ -4462,8 +4464,7 @@ std::ostream& operator <<(std::ostream &s, const Paths &p)
     return s;
 }
 
-//MinimumDistance is a brute force algorithm which is faster then any other optimal algorithm for small polygons
-double MinimumDistance(const Path &p1, const Path &p2)
+double MinimumDistanceBFSqrd(const Path &p1, const Path &p2)
 {
     double distance=std::numeric_limits<double>::max();
     const unsigned int N1=p1.size();
@@ -4483,6 +4484,39 @@ double MinimumDistance(const Path &p1, const Path &p2)
     return distance;
 }
 
+double MinimumDistanceCalipersSqrd(const Path &p1, const Path &p2)
+{
+    int N=1;
+    if(Orientation(p1)!=Orientation(p2)){
+        N=p1.size()-1;
+    }
+    unsigned int minIndex=0;
+    int minX=p1[0].X;
+    for(unsigned int i=1;i<p1.size();++i)
+        if(p1[i].X<minX){
+            minX=p1[i].X;
+            minIndex=i;
+        }
+    int maxX=p2[0].X;
+    unsigned int maxIndex=0;
+    for(unsigned int i=1;i<p2.size();++i)
+        if(p2[i].X>maxX){
+            maxX=p2[i].X;
+            maxIndex=i;
+        }
+    double distance=std::numeric_limits<double>::max();
+    unsigned ind1=minIndex,ind2=maxIndex;
+    do{
+        double d=DistanceSegmentSegmentSqrd(p1[ind1],p1[(ind1+N)%p1.size()],p2[ind2],p2[(ind2+1)%p2.size()]);
+        if(d<distance)
+            distance=d;
+        ind1=(ind1+N)%p1.size();
+        ind2=(ind2+1)%p2.size();
+    }
+    while(ind1!=minIndex || ind2!=maxIndex);
+    return distance;
+}
+
 double DistanceFromSegmentSqrd(const IntPoint &seg1, const IntPoint &seg2,const IntPoint &p)
 {
     double l2=DistanceSqrd(seg1,seg2);
@@ -4496,6 +4530,11 @@ double DistanceFromSegmentSqrd(const IntPoint &seg1, const IntPoint &seg2,const 
     const IntPoint proj(seg1.X+t*(seg2.X-seg1.X),seg1.Y+t*(seg2.Y-seg1.Y));
     return DistanceSqrd(p,proj);
 }
+
+double DistanceSegmentSegmentSqrd(const IntPoint &seg1p1,const IntPoint &seg1p2,const IntPoint &seg2p1,const IntPoint &seg2p2){
+    return std::min(DistanceFromSegmentSqrd(seg1p1,seg1p2,seg2p1),DistanceFromSegmentSqrd(seg1p1,seg1p2,seg2p2));
+}
+
 
 //------------------------------------------------------------------------------
 
