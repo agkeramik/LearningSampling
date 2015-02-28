@@ -1,9 +1,6 @@
 #include <iostream>
 #include "Global.h"
 
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <libxml/parserInternals.h>
 
 #include <sstream>
 #include <fstream>
@@ -17,8 +14,14 @@
 
 
 #include "Context.h"
-using namespace std;
 
+#include "ConversationCostCalculator.h"
+#include "DistanceCostCalculator.h"
+#include "CostCalculator.h"
+#include "clipper.hpp"
+
+using namespace std;
+using namespace ClipperLib;
 
 //void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
 //  printf("Beginning of element : %s \n", name);
@@ -111,7 +114,7 @@ void cdfTest(){
     exit(0);
 }
 
-int main(int argc, char* argv[])
+int mainOld(int argc, char* argv[])
 {
     srand(time(NULL));
 
@@ -181,4 +184,36 @@ int main(int argc, char* argv[])
     outputFile.close();
 
     return 0;
+}
+
+int main()
+{
+//    Properties prop("properties.txt");
+//    FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
+//    Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
+//    Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
+//    f1.setX(0);
+//    f1.setY(0);
+//    f1.setTheta(0);
+//    f2.setX(0);
+//    f2.setY(168);
+//    f2.setTheta(M_PI_2);
+//    Room room;
+//    room.addFurniture(f1);
+//    room.addFurniture(f2);
+//    CostCalculator *convCos=new DistanceCostCalculator();
+//    std::cout<<convCos->calculateCost(room)<<std::endl;
+//    delete convCos;
+    Path path1;
+    path1<<IntPoint()<<IntPoint(100,0)<<IntPoint(100,100)<<IntPoint(0,100);
+    Path path2;
+    path2<<IntPoint(500,500)<<IntPoint(1500,500)<<IntPoint(1500,1500)<<IntPoint(500,1500);
+    Clipper clipper;
+    std::cout<<clipper.AddPath(path1,ptSubject,true)<<endl;
+    cout<<clipper.AddPath(path2,ptClip,true)<<endl;
+    std::cout<<path1<<path2;
+
+    cout<<"Distance="<<MinimumDistance(path1,path2)<<endl;
+
+
 }

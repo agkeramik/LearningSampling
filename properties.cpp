@@ -21,6 +21,8 @@ Properties::Properties(const char *fileName)
                 furnInfo=line.substr(pos+1);
             else if(type.compare("XMLDatabase")==0)
                 XMLDatabase=line.substr(pos+1);
+            else if(type.compare("ConversationProp")==0)
+                conversationProp=line.substr(pos+1);
         }
     }
     fin.close();
@@ -35,6 +37,11 @@ const std::string &Properties::getFurnitureInfo() const
 const std::string &Properties::getXMLDatabase() const
 {
     return XMLDatabase;
+}
+
+const std::string &Properties::getConversationProp() const
+{
+    return conversationProp;
 }
 
 const std::string &Properties::getFurnitureCount() const
