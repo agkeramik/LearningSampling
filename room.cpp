@@ -43,6 +43,15 @@ void Room::print(std::ostream &out) const
         furnitures[i].print(out);
     }
     out<<"</Furnitures>\n";
+    out<<"<DoorsOrWindows>\n";
+    for (unsigned int i=0;i<doors.size();++i){
+        doors[i].print(out);
+    }
+    for (unsigned int i=0;i<windows.size();++i){
+        windows[i].print(out);
+    }
+    out<<"</DoorsOrWindows>\n";
+
     out<<"</Room>\n";
 }
 
@@ -82,9 +91,20 @@ double Room::getBottomRightCornerY() const
 
 void Room::print(std::ostream &out, double xo, double yo) const
 {
-
     for (unsigned int i=0;i<furnitures.size();++i){
         Furniture f = furnitures[i];
+        f.setX(f.getX()+xo);
+        f.setY(f.getY()+yo);
+        f.print(out);
+    }
+    for (unsigned int i=0;i<doors.size();++i){
+        Furniture f = doors[i];
+        f.setX(f.getX()+xo);
+        f.setY(f.getY()+yo);
+        f.print(out);
+    }
+    for (unsigned int i=0;i<windows.size();++i){
+        Furniture f = windows[i];
         f.setX(f.getX()+xo);
         f.setY(f.getY()+yo);
         f.print(out);

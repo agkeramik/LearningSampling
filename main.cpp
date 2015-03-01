@@ -18,6 +18,8 @@
 #include "ConversationCostCalculator.h"
 #include "DistanceCostCalculator.h"
 #include "CostCalculator.h"
+#include "CostFunction.h"
+
 #include "clipper.hpp"
 
 using namespace std;
@@ -102,8 +104,6 @@ void cdfTest(){
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
-
-
     int samples = 1;
     if (argc > 1)
         samples = atoi(argv[1]);
@@ -122,11 +122,15 @@ int main(int argc, char* argv[])
     Furniture door1=furnCat.getNewFurniture("eTeks#door");
     std::cout<<"after Door 1\n";
     door1.setX(0);
-    door1.setY(200);
+    door1.setY(325);
     door1.setTheta(4.71);
-    door1.print(std::cout);
-    std::cout<<std::endl;
     room.addDoor(door1);
+    CostFunction evalFunction;
+    CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
+    evalFunction.addComponent(*conv);
+    CostCalculator *dist=new DistanceCostCalculator();
+    evalFunction.addComponent(*dist);
+
     for (int i = 0; i < samples; ++i){
 
         Context ctx(room,furnCat,mixutures);
@@ -135,7 +139,8 @@ int main(int argc, char* argv[])
             ctx.addFurnitureToList("Renouzate#sofa2");
             ctx.addFurnitureToList("Renouzate#sofa2");
             ctx.addFurnitureToList("Renouzate#armchair");
-            //ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#Table1x1");
             ctx.addFurnitureToList("Renouzate#Table1x1");
         }else{
             ctx.addFurnituresFromFile(argv[2]);
@@ -151,23 +156,22 @@ int main(int argc, char* argv[])
         sampler->furnish();
         delete sampler;
 
-        stringstream fileName;
-        fileName << "output/layout_" << i << ".xml";
-
         int w = sqrt(samples);
         int x = i % w;
         int y = i / w;
 
-        //ofstream outputFile(fileName.str().c_str());
         ctx.room.print(outputFile, x * 700, y * 700);
-        //outputFile.close();
 
+        std::cout<<"Room "<<i<<std::endl;
+        evalFunction.calculateCost(ctx.room);
+        std::cout<<std::endl;
     }
     outputFile<<"</Furnitures>\n";
     outputFile<<"</Room>\n";
 
     outputFile.close();
-
+    delete conv;
+    delete dist;
     return 0;
 }
 

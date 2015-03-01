@@ -24,7 +24,7 @@ void Furniture::updateGeometry()
     double virDepth=depth;
     if(catalogId=="eTeks#door" || catalogId=="eTeks#doubleFrenchWindow126x200" ||
             catalogId=="eTeks#frenchWindow85x200")
-        virDepth=width;
+        virDepth=2*width;
     localPoly.clear();
     localPoly<<ClipperLib::IntPoint((int)(-width/2.0),(int)(-virDepth/2.0))
             <<ClipperLib::IntPoint((int)(width/2.0),(int)(-virDepth/2.0))
@@ -83,6 +83,7 @@ bool Furniture::collision(const Furniture &f) const
 
 Furniture::~Furniture()
 {
+
 }
 
 void Furniture::print(std::ostream &out) const

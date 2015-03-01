@@ -16,6 +16,7 @@ public:
     void setStartRange(double startRange);
     double getEndRange();
     void setEndRange(double endRange);
+    virtual void print(std::ostream &out);
     virtual ~DistanceCostCalculator();
 };
 

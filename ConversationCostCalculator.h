@@ -14,6 +14,7 @@ public:
 
     ConversationCostCalculator(const char *fileName);
     virtual double calculateCost(Room &room);
+    virtual void print(std::ostream &out);
     virtual ~ConversationCostCalculator();
 };
 

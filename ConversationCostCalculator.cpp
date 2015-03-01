@@ -5,8 +5,10 @@
 
 double ConversationCostCalculator::costFunction(Furniture &f1,Furniture &f2)
 {
-    //return exp(delta / 30.0) - 1.0;
-    return -(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
+    double cost= -(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
+    if(cost>-1)
+        cost=9+10*cost;
+    return cost;
 }
 
 double ConversationCostCalculator::cosineDeltaAngle(Furniture &f1, Furniture &f2)
@@ -59,6 +61,11 @@ double ConversationCostCalculator::calculateCost(Room &room)
         }
     }
     return cost;
+}
+
+void ConversationCostCalculator::print(std::ostream &out)
+{
+    out<<"Conversation Cost Calc: ";
 }
 
 ConversationCostCalculator::~ConversationCostCalculator()

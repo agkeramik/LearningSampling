@@ -20,6 +20,11 @@ double CollisionCostCalculator::calculateCost(Room &room)
     return violationArea;
 }
 
+void CollisionCostCalculator::print(std::ostream &out)
+{
+    out<<"Collision Cost Calc: ";
+}
+
 CollisionCostCalculator::~CollisionCostCalculator()
 {
 

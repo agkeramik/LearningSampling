@@ -27,6 +27,11 @@ void DistanceCostCalculator::setEndRange(double endRange)
     this->endRange = endRange;
 }
 
+void DistanceCostCalculator::print(std::ostream &out)
+{
+    out<<"Distance Cost Calc: ";
+}
+
 double DistanceCostCalculator::getEndRange()
 {
     return endRange;

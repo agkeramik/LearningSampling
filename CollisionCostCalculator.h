@@ -7,6 +7,7 @@ class CollisionCostCalculator : public CostCalculator{
 public:
     CollisionCostCalculator();
     virtual double calculateCost(Room &room);
+    virtual void print(std::ostream &out);
     virtual ~CollisionCostCalculator();
 };
 
