@@ -4535,6 +4535,17 @@ double DistanceSegmentSegmentSqrd(const IntPoint &seg1p1,const IntPoint &seg1p2,
     return std::min(DistanceFromSegmentSqrd(seg1p1,seg1p2,seg2p1),DistanceFromSegmentSqrd(seg1p1,seg1p2,seg2p2));
 }
 
+Path RotateTranslate(const Path &input, int X, int Y, double theta)
+{
+    Path output;
+    double c=cos(theta),s=sin(theta);
+    for (unsigned int i=0;i<input.size();++i){
+        IntPoint point(input[i].X*c-s*input[i].Y+X,input[i].X*s+input[i].Y*c+Y);
+        output<<point;
+    }
+    return output;
+}
+
 
 //------------------------------------------------------------------------------
 

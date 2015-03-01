@@ -50,21 +50,6 @@ using namespace ClipperLib;
 //      xmlParseDocument(ctxt);
 //}
 
-void geoTest(){
-    Point points[] = { Point(0,0), Point(5.1,0), Point(1,1), Point(0.5,6)};
-    Polygon pgn(points, points+4);
-
-    Point points2[] = { Point(-2,-2),  Point(2,-2), Point(2,2), Point(-2,2)};
-    Polygon pgn2(points2, points2+4);
-
-    if (CGAL::do_intersect(pgn, pgn2)) cout << "Intersection"<<endl; else cout << "No Intersection"  << endl;
-
-    Transform transformRot(CGAL::ROTATION, cos(3.14/4.0), sin(3.14/4.0));
-    Transform transformTrans(CGAL::TRANSLATION, Vector(0, 10));
-    Polygon trPg(CGAL::transform(transformTrans, CGAL::transform(transformRot, pgn2)));
-
-    cout << trPg;
-}
 
 void parseTest(){
     ifstream infile("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
@@ -114,7 +99,7 @@ void cdfTest(){
     exit(0);
 }
 
-int mainOld(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     srand(time(NULL));
 
@@ -186,42 +171,23 @@ int mainOld(int argc, char* argv[])
     return 0;
 }
 
-int main()
+int mainTest()
 {
-    //    Properties prop("properties.txt");
-    //    FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
-    //    Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
-    //    Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
-    //    f1.setX(0);
-    //    f1.setY(0);
-    //    f1.setTheta(0);
-    //    f2.setX(0);
-    //    f2.setY(168);
-    //    f2.setTheta(M_PI_2);
-    //    Room room;
-    //    room.addFurniture(f1);
-    //    room.addFurniture(f2);
-    //    CostCalculator *convCos=new DistanceCostCalculator();
-    //    std::cout<<convCos->calculateCost(room)<<std::endl;
-    //    delete convCos;
-    Path path1;
-    path1<<IntPoint()<<IntPoint(100,0)<<IntPoint(100,100)<<IntPoint(0,100);
-    Path path2;
-    path2<<IntPoint(500,500)<<IntPoint(1500,500)<<IntPoint(1500,1500)<<IntPoint(500,1500);
-    Clipper clipper;
-    std::cout<<clipper.AddPath(path1,ptSubject,true)<<endl;
-    cout<<clipper.AddPath(path2,ptClip,true)<<endl;
-    std::cout<<path1<<path2;
-
-    cout<<"Distance="<<MinimumDistanceBFSqrd(path1,path2)<<endl;
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path1,path2)<<endl;
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path2,path1)<<endl;
-    ReversePath(path2);
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path2,path1)<<endl;
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path1,path2)<<endl;
-    ReversePath(path1);
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path2,path1)<<endl;
-    cout<<"Distance="<<MinimumDistanceCalipersSqrd(path1,path2)<<endl;
-
-
+        Properties prop("properties.txt");
+        FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
+        Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
+        Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
+        f1.setX(0);
+        f1.setY(0);
+        f1.setTheta(0);
+        f2.setX(0);
+        f2.setY(300);
+        f2.setTheta(M_PI_4);
+        Room room;
+        room.addFurniture(f1);
+        room.addFurniture(f2);
+        CostCalculator *convCos=new DistanceCostCalculator();
+        std::cout<<convCos->calculateCost(room)<<std::endl;
+        delete convCos;
+        return 0;
 }

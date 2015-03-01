@@ -7,23 +7,21 @@
 #include <mlpack/core.hpp>
 #include "Global.h"
 #include <ostream>
+#include "clipper.hpp"
 
 class Furniture
 {
+    ClipperLib::Path localPoly;
 
 public:
+    int id;
+    std::string catalogId, name;
+    double width, height, depth;
+    arma::Col<double> features;
+
+
     Furniture(int _id=-1, std::string _catalogId="unitialized");
     Furniture(std::string xmlContent);
-
-    Transform rotation;
-    Transform translation;
-    Polygon centeredGeometry;
-
-	int id;
-    std::string catalogId, name;
-	double width, height, depth;
-
-	arma::Col<double> features;
 
     void updateGeometry();
 
@@ -40,8 +38,7 @@ public:
     void setHeight(double height);
     void setDepth(double depth);
 
-    Polygon getTransformedGeometry() const;
-
+    ClipperLib::Path getGlobalGeometry() const;
     bool collision(const Furniture &f) const;
 
 

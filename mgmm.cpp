@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+
 #include <mlpack/core.hpp>
 
 #include <mlpack/methods/gmm/gmm.hpp>

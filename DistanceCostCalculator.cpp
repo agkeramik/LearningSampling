@@ -1,4 +1,5 @@
 #include "DistanceCostCalculator.h"
+#include <math.h>
 
 void DistanceCostCalculator::setSeverity(double severtiy)
 {
@@ -53,10 +54,10 @@ double DistanceCostCalculator::calculateCost(Room &room){
     double cost = 0;
     vector<Furniture> &furnitures = room.getFurnitures();
     for(unsigned int i=0;i<furnitures.size()-1;++i){
-        Polygon pi = furnitures[i].getTransformedGeometry();
+        ClipperLib::Path pi = furnitures[i].getGlobalGeometry();
         for(unsigned int j=i+1;j<furnitures.size();++j){
-            Polygon pj = furnitures[j].getTransformedGeometry();
-            cost += basicEval(Global::distance(pi, pj),30,50);
+            ClipperLib::Path pj = furnitures[j].getGlobalGeometry();
+            cost += basicEval(std::sqrt(Global::distanceSqrd(pi, pj)),30,50);
         }
     }
     return cost;

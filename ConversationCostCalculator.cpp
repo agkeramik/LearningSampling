@@ -11,16 +11,13 @@ double ConversationCostCalculator::costFunction(Furniture &f1,Furniture &f2)
 
 double ConversationCostCalculator::cosineDeltaAngle(Furniture &f1, Furniture &f2)
 {
-
-    Polygon f1g = f1.getTransformedGeometry();
-    Point centroid1 = Global::centroid(f1g);
-    Polygon f2g = f2.getTransformedGeometry();
-    Point centroid2 = Global::centroid(f2g);
-    Vector v(centroid1, centroid2);
+    //assuming that f1,f2 centroids are resp. the positions of f1,f2
+    //v is the vector going from f1's centroid towards f2's centroid
+    Vec2 v(f2.getX()-f1.getX(), f2.getY()-f1.getY());
     //we are taking theta+pi/2 because the orientation of
     //the chairs are along the y axis in the local coordinates
-    Vector f1Dir(-sin(f1.getTheta()),cos(f1.getTheta()));
-    return f1Dir*v/sqrt(v.squared_length()*f1Dir.squared_length());
+    Vec2 f1Dir(-sin(f1.getTheta()),cos(f1.getTheta()));
+    return f1Dir.dot(v)/sqrt(v.lengthSqrd()*f1Dir.lengthSqrd());
 }
 
 bool ConversationCostCalculator::goesInConvCost(Furniture &f)

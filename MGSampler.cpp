@@ -37,11 +37,11 @@ bool MGSampler::accept(Furniture &f){
     if (f.getX()<0 || f.getX()>355 || f.getY()<0 || f.getY()>410)
         return false;
 
-    DEBUG( "\tAccept Condition For:\n\t\t");DEBUG_LINE(f.getTransformedGeometry());
+    DEBUG( "\tAccept Condition For:\n\t\t");DEBUG_LINE(f.getGlobalGeometry());
     for (unsigned int i = 0; i < furnitures.size(); ++i)
         if (f.collision((furnitures[i]))){
             DEBUG( "\t We have collision between ");DEBUG(f.catalogId);DEBUG(" and ");DEBUG_LINE(furnitures[i].catalogId);
-            DEBUG("\t\t");DEBUG_LINE(furnitures[i].getTransformedGeometry());
+            DEBUG("\t\t");DEBUG_LINE(furnitures[i].getGlobalGeometry());
             return false;
         }
 
@@ -49,7 +49,7 @@ bool MGSampler::accept(Furniture &f){
     for (unsigned int i=0;i<doors.size();++i)
         if (f.collision((doors[i]))){
             DEBUG( "\t We have collision between ");DEBUG(f.catalogId);DEBUG(" and ");DEBUG_LINE(doors[i].catalogId);
-            DEBUG("\t\t");DEBUG_LINE(doors[i].getTransformedGeometry());
+            DEBUG("\t\t");DEBUG_LINE(doors[i].getGlobalGeometry());
             return false;
         }
     return true;
