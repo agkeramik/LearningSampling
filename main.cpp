@@ -1,9 +1,6 @@
 #include <iostream>
 #include "Global.h"
 
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <libxml/parserInternals.h>
 
 #include <sstream>
 #include <fstream>
@@ -17,8 +14,16 @@
 
 
 #include "Context.h"
-using namespace std;
 
+#include "ConversationCostCalculator.h"
+#include "DistanceCostCalculator.h"
+#include "CostCalculator.h"
+#include "CostFunction.h"
+
+#include "clipper.hpp"
+
+using namespace std;
+using namespace ClipperLib;
 
 //void start_element_callback(void *user_data, const xmlChar *name, const xmlChar **attrs) {
 //  printf("Beginning of element : %s \n", name);
@@ -47,21 +52,6 @@ using namespace std;
 //      xmlParseDocument(ctxt);
 //}
 
-void geoTest(){
-        Point points[] = { Point(0,0), Point(5.1,0), Point(1,1), Point(0.5,6)};
-        Polygon pgn(points, points+4);
-
-        Point points2[] = { Point(-2,-2),  Point(2,-2), Point(2,2), Point(-2,2)};
-        Polygon pgn2(points2, points2+4);
-
-        if (CGAL::do_intersect(pgn, pgn2)) cout << "Intersection"<<endl; else cout << "No Intersection"  << endl;
-
-        Transform transformRot(CGAL::ROTATION, cos(3.14/4.0), sin(3.14/4.0));
-        Transform transformTrans(CGAL::TRANSLATION, Vector(0, 10));
-        Polygon trPg(CGAL::transform(transformTrans, CGAL::transform(transformRot, pgn2)));
-
-        cout << trPg;
-}
 
 void parseTest(){
     ifstream infile("/home/ubuntumachine/ContributedFurnitureCatalog.properties");
@@ -70,11 +60,10 @@ void parseTest(){
     while (getline(infile, line))
     {
         istringstream iss(line);
-        int p = line.find("=");
+        unsigned int p = line.find("=");
         if (p>0 && p < line.size() - 1){
             string key = line.substr(0, p-1);
             string value = line.substr(p+1, line.size()-1);
-            int s = key.find("#");
             cout << key << "," << value << endl;
         }
 
@@ -89,7 +78,7 @@ int pickFromCDF(vector<double> &cdf){
     double total = cdf[cdf.size()-1];
     double choice = total * (double)std::rand() / RAND_MAX;
 
-    for (int i = 0; i < cdf.size(); ++i)
+    for (unsigned int i = 0; i < cdf.size(); ++i)
         if (choice <= cdf[i])
             return i;
     return -1;
@@ -103,7 +92,7 @@ void cdfTest(){
 
     int v[]={0,0,0};
 
-    for (int i = 0; i < 1000; ++i){
+    for (unsigned int i = 0; i < 1000; ++i){
         ++v[pickFromCDF(dist)];
     }
 
@@ -112,6 +101,7 @@ void cdfTest(){
     exit(0);
 }
 
+<<<<<<< HEAD
 
 void old(){
     //    Properties prop("properties.txt");
@@ -165,6 +155,11 @@ void furnish(int argc, char* argv[]){
     srand(time(NULL));
 
 
+=======
+int main(int argc, char* argv[])
+{
+    srand(time(NULL));
+>>>>>>> a72f23e06656d0772e86b68f5022f4cbc03f84d8
     int samples = 1;
     if (argc > 1)
         samples = atoi(argv[1]);
@@ -176,6 +171,7 @@ void furnish(int argc, char* argv[]){
     outputFile<<"<Room>\n";
     outputFile<<"<Furnitures>\n";
 
+<<<<<<< HEAD
     for (int i = 0; i < samples; ++i){
 
         Context ctx(prop);
@@ -252,3 +248,85 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+=======
+    FurnitureCatalog furnCat(prop.getFurnitureInfo().c_str());
+    MGMM mixutures=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
+    Room room;
+    std::cout<<"before Door 1\n";
+    Furniture door1=furnCat.getNewFurniture("eTeks#door");
+    std::cout<<"after Door 1\n";
+    door1.setX(0);
+    door1.setY(325);
+    door1.setTheta(4.71);
+    room.addDoor(door1);
+    CostFunction evalFunction;
+    CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
+    evalFunction.addComponent(*conv);
+    CostCalculator *dist=new DistanceCostCalculator();
+    evalFunction.addComponent(*dist);
+
+    for (int i = 0; i < samples; ++i){
+
+        Context ctx(room,furnCat,mixutures);
+        if (argc < 3){
+            ctx.addFurnitureToList("Renouzate#Table3x2");
+            ctx.addFurnitureToList("Renouzate#sofa2");
+            ctx.addFurnitureToList("Renouzate#sofa2");
+            ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#armchair");
+            ctx.addFurnitureToList("Renouzate#Table1x1");
+            ctx.addFurnitureToList("Renouzate#Table1x1");
+        }else{
+            ctx.addFurnituresFromFile(argv[2]);
+        }
+
+        Furniture prex = ctx.catalog.getNewFurniture("Renouzate#TVTable");
+        prex.setX(175);
+        prex.setY(365);
+        prex.setTheta(1.57);
+        ctx.room.addFurniture(prex);
+
+        Sampler *sampler = new MGSampler(&ctx);
+        sampler->furnish();
+        delete sampler;
+
+        int w = sqrt(samples);
+        int x = i % w;
+        int y = i / w;
+
+        ctx.room.print(outputFile, x * 700, y * 700);
+
+        std::cout<<"Room "<<i<<std::endl;
+        evalFunction.calculateCost(ctx.room);
+        std::cout<<std::endl;
+    }
+    outputFile<<"</Furnitures>\n";
+    outputFile<<"</Room>\n";
+
+    outputFile.close();
+    delete conv;
+    delete dist;
+    return 0;
+}
+
+int mainTest()
+{
+        Properties prop("properties.txt");
+        FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
+        Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
+        Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
+        f1.setX(0);
+        f1.setY(0);
+        f1.setTheta(0);
+        f2.setX(0);
+        f2.setY(300);
+        f2.setTheta(M_PI_4);
+        Room room;
+        room.addFurniture(f1);
+        room.addFurniture(f2);
+        CostCalculator *convCos=new DistanceCostCalculator();
+        std::cout<<convCos->calculateCost(room)<<std::endl;
+        delete convCos;
+        return 0;
+}
+>>>>>>> a72f23e06656d0772e86b68f5022f4cbc03f84d8

@@ -14,7 +14,7 @@ public:
 
     Sampler(Context *context);
 	virtual bool place(Furniture &toPlace) = 0;
-    virtual bool accept(Furniture &toPlace, vector<Furniture*> &furnitures) = 0;
+    virtual bool accept(Furniture &toPlace) = 0;
     virtual void furnish(vector<Furniture> &toPlace) = 0;
 	virtual void furnish() = 0;
 	virtual ~Sampler();

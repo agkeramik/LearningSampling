@@ -15,7 +15,7 @@ public:
     MGSampler(Context *context);
     virtual ~MGSampler();
 	virtual bool place(Furniture &toPlace);
-    virtual bool accept(Furniture &toPlace, vector<Furniture*> &furnitures);
+    virtual bool accept(Furniture &toPlace);
     virtual void furnish(vector<Furniture> &toPlace);
 	virtual void furnish();
 };

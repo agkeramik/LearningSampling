@@ -8,7 +8,7 @@ Properties::Properties(const char *fileName)
     fin.open(fileName);
     std::string line;
     while(std::getline(fin,line)>0){
-        int pos=line.find('=');
+        unsigned int pos=line.find('=');
         if(pos!=std::string::npos){
             std::string type=line.substr(0,pos);
             if(type.compare("DataFolder")==0)
@@ -21,6 +21,8 @@ Properties::Properties(const char *fileName)
                 furnInfo=line.substr(pos+1);
             else if(type.compare("XMLDatabase")==0)
                 XMLDatabase=line.substr(pos+1);
+            else if(type.compare("ConversationProp")==0)
+                conversationProp=line.substr(pos+1);
         }
     }
     fin.close();
@@ -35,6 +37,11 @@ const std::string &Properties::getFurnitureInfo() const
 const std::string &Properties::getXMLDatabase() const
 {
     return XMLDatabase;
+}
+
+const std::string &Properties::getConversationProp() const
+{
+    return conversationProp;
 }
 
 const std::string &Properties::getFurnitureCount() const

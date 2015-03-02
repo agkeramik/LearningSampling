@@ -11,19 +11,21 @@ FurnitureCatalog::FurnitureCatalog(const char *catalogFileName)
     Furniture furniture;
     while (getline(infile, line))
     {
-        int p = line.find("=");
+        unsigned int p = line.find("=");
         if (p > 0 && p < line.size() - 1){
             std::string key = line.substr(0, p);
             std::string value = line.substr(p+1, line.size()-1);
 
-            int s = key.find("#");
+            unsigned int s = key.find("#");
             if (s > 0 && s < key.size()-1){
                 std::string keyType = key.substr(0, s);
                 int keyId = atoi(key.substr(s+1, key.size()).c_str());
 
                 if (keyType.compare("id")==0){
-                    if (furniture.id!=-1)
-                        this->catalog[furniture.catalogId]=furniture;
+                    //be carefull there is a copy of this block at the end of this function
+                    if (furniture.id!=-1){
+                        catalog[furniture.catalogId]=furniture;
+                    }
                     furniture = Furniture(keyId, value);
                 }else if (keyType.compare("name")==0){
                     furniture.name = value;
@@ -39,8 +41,9 @@ FurnitureCatalog::FurnitureCatalog(const char *catalogFileName)
     }
 
     //add last one
-    if (furniture.id!=-1)
+    if (furniture.id!=-1){
         this->catalog[furniture.catalogId]=furniture;
+    }
     infile.close();
 }
 

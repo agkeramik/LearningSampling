@@ -1,5 +1,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
+<<<<<<< HEAD
 
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Point_2.h>
@@ -34,8 +35,31 @@ public:
     static double angle(Vector &v1, Vector &v2);
     static Point centroid(Polygon &p);
 };
+=======
 
-#define DEBUG_ON
+#include "clipper.hpp"
+>>>>>>> a72f23e06656d0772e86b68f5022f4cbc03f84d8
+
+using namespace std;
+
+class Global {
+public:
+    static double intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2);
+    static double distanceSqrd(const ClipperLib::Path &p1, const ClipperLib::Path &p2);
+};
+
+class Vec2{
+public:
+    double x;
+    double y;
+    Vec2(double _x, double _y);
+    double lengthSqrd();
+    double dot(const Vec2 &v);
+};
+Vec2 operator+(const Vec2 &v1,const Vec2 &v2);
+Vec2 operator-(const Vec2 &v1,const Vec2 &v2);
+
+//#define DEBUG_ON
 
 #ifdef DEBUG_ON
 #define DEBUG(x) std::cout<<x

@@ -6,13 +6,11 @@
 
 class Database
 {
-    Room* currentRoom;
-    Furniture* currentFurniture;
     std::vector<Room> rooms;
 public:
     Database(const char *xmlFileName);
     unsigned int nb_rooms() const;
-    const Room &room(int i) const;
+    const Room &room(unsigned int i) const;
     void print() const;
 };
 

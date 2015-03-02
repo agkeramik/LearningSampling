@@ -15,12 +15,11 @@ class Context
 {
 public:
     Room room;
-    FurnitureCatalog catalog;
-    MGMM mixtures;
+    const FurnitureCatalog &catalog;
+    const MGMM &mixtures;
     vector<Furniture> toAdd;
 
-    Context(Properties &p);
-    Context(Room &_room, FurnitureCatalog &_catalog, MGMM &_mixtures);
+    Context(Room &_room, const FurnitureCatalog &_catalog,const MGMM &_mixtures);
     void addFurnitureToList(const char *catalogId);
     void addFurnituresFromFile(const char *filePath);
     void printLibrary() const;
