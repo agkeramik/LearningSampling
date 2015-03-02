@@ -102,6 +102,41 @@ void cdfTest(){
     exit(0);
 }
 
+
+
+void walkFurniture(Furniture &f){
+    f.setX(f.getX() + 2.0*rand()/RAND_MAX - 1.0);
+    f.setY(f.getY() + 2.0*rand()/RAND_MAX - 1.0);
+}
+
+void optimize(Room &room, CostFunction &costFunction){
+    int cycles = 30;
+    vector<Furniture> &f = room.getFurnitures();
+
+    double lastCost = 100;
+    for (int i = 0; i < cycles; ++i){
+
+        for (int j = 0; j < f.size(); ++j){
+            Furniture &furniture = f[i];
+
+            double ox = (double)furniture.getX();
+            double oy = (double)furniture.getY();
+
+            walkFurniture(furniture);
+            double cost = costFunction.calculateCost(room);
+            if (cost < lastCost){
+                lastCost = cost;
+            }else{
+                furniture.setX(ox);
+                furniture.setY(oy);
+            }
+
+            std::cout << "cost = " << cost << std::endl;
+        }
+
+    }
+}
+
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
@@ -135,8 +170,10 @@ int main(int argc, char* argv[])
 
     CostFunction evalFunction;
     CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
+    conv->setWeight(1.0);
     evalFunction.addComponent(*conv);
     CostCalculator *dist=new DistanceCostCalculator();
+    dist->setWeight(1.0);
     evalFunction.addComponent(*dist);
     CostCalculator *clearance=new ClearanceCostCalculator();
 
@@ -167,6 +204,9 @@ int main(int argc, char* argv[])
         Sampler *sampler = new MGSampler(&ctx);
         sampler->furnish();
         delete sampler;
+
+
+        optimize(ctx.room, evalFunction);
 
         int w = sqrt(samples);
         int x = i % w;
