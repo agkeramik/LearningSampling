@@ -19,6 +19,7 @@
 #include "DistanceCostCalculator.h"
 #include "CostCalculator.h"
 #include "CostFunction.h"
+#include "clearancecostcalculator.h"
 
 #include "clipper.hpp"
 
@@ -125,12 +126,23 @@ int main(int argc, char* argv[])
     door1.setY(325);
     door1.setTheta(4.71);
     room.addDoor(door1);
+
+    Furniture door2=furnCat.getNewFurniture("eTeks#doubleFrenchWindow126x200");
+    door2.setX(360);
+    door2.setY(330);
+    door2.setTheta(1.57);
+    room.addDoor(door2);
+
     CostFunction evalFunction;
     CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
     evalFunction.addComponent(*conv);
     CostCalculator *dist=new DistanceCostCalculator();
     evalFunction.addComponent(*dist);
+    CostCalculator *clearance=new ClearanceCostCalculator();
 
+    std::vector<Room> roomSamples;
+    int *permIndex=new int[samples];
+    double *convCost=new double[samples];
     for (int i = 0; i < samples; ++i){
 
         Context ctx(room,furnCat,mixutures);
@@ -160,38 +172,59 @@ int main(int argc, char* argv[])
         int x = i % w;
         int y = i / w;
 
-        ctx.room.print(outputFile, x * 700, y * 700);
+        //ctx.room.print(outputFile, x * 700, y * 700);
 
-        std::cout<<"Room "<<i<<std::endl;
-        evalFunction.calculateCost(ctx.room);
-        std::cout<<std::endl;
+        permIndex[i]=i;
+        convCost[i]=clearance->calculateCost(ctx.room);
+        roomSamples.push_back(ctx.room);
     }
+
+    for(int i=0;i<samples-1;++i){
+        for(int j=i+1;j<samples;++j){
+            if(convCost[permIndex[i]]>convCost[permIndex[j]]){
+                int temp=permIndex[i];
+                permIndex[i]=permIndex[j];
+                permIndex[j]=temp;
+            }
+        }
+    }
+    for(int i=0;i<samples;++i){
+        std::cout<<"Room "<<i<<std::endl;
+        std::cout<<convCost[permIndex[i]];
+        std::cout<<std::endl;
+        int w = sqrt(samples);
+        int x = i % w;
+        int y = i / w;
+        roomSamples[permIndex[i]].print(outputFile, x * 700, y * 700);
+    }
+
     outputFile<<"</Furnitures>\n";
     outputFile<<"</Room>\n";
-
     outputFile.close();
+    delete convCost;
     delete conv;
     delete dist;
+    delete permIndex;
     return 0;
 }
 
 int mainTest()
 {
-        Properties prop("properties.txt");
-        FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
-        Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
-        Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
-        f1.setX(0);
-        f1.setY(0);
-        f1.setTheta(0);
-        f2.setX(0);
-        f2.setY(300);
-        f2.setTheta(M_PI_4);
-        Room room;
-        room.addFurniture(f1);
-        room.addFurniture(f2);
-        CostCalculator *convCos=new DistanceCostCalculator();
-        std::cout<<convCos->calculateCost(room)<<std::endl;
-        delete convCos;
-        return 0;
+    Properties prop("properties.txt");
+    FurnitureCatalog furCat(prop.getFurnitureInfo().c_str());
+    Furniture f1=furCat.getNewFurniture("Renouzate#sofa2");
+    Furniture f2=furCat.getNewFurniture("Renouzate#sofa2");
+    f1.setX(0);
+    f1.setY(0);
+    f1.setTheta(0);
+    f2.setX(0);
+    f2.setY(300);
+    f2.setTheta(M_PI_4);
+    Room room;
+    room.addFurniture(f1);
+    room.addFurniture(f2);
+    CostCalculator *convCos=new DistanceCostCalculator();
+    std::cout<<convCos->calculateCost(room)<<std::endl;
+    delete convCos;
+    return 0;
 }

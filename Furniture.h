@@ -12,11 +12,14 @@
 class Furniture
 {
     ClipperLib::Path localPoly;
+    ClipperLib::Path clearancePoly;
 
 public:
     int id;
     std::string catalogId, name;
     double width, height, depth;
+    //positive OffsetX, negative OffsetX ...
+    double pOffX,nOffX,pOffY,nOffY;
     arma::Col<double> features;
 
 
@@ -37,8 +40,13 @@ public:
     void setWidth(double width);
     void setHeight(double height);
     void setDepth(double depth);
+    void setPositiveOffsetX(double off);
+    void setPositiveOffsetY(double off);
+    void setNegativeOffsetX(double off);
+    void setNegativeOffsetY(double off);
 
     ClipperLib::Path getGlobalGeometry() const;
+    ClipperLib::Path getClearanceGeometry() const;
     bool collision(const Furniture &f) const;
 
 

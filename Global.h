@@ -5,13 +5,15 @@
 
 using namespace std;
 
-class Global {
+class Global
+{
 public:
     static double intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2);
     static double distanceSqrd(const ClipperLib::Path &p1, const ClipperLib::Path &p2);
 };
 
-class Vec2{
+class Vec2
+{
 public:
     double x;
     double y;

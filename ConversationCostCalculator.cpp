@@ -6,8 +6,8 @@
 double ConversationCostCalculator::costFunction(Furniture &f1,Furniture &f2)
 {
     double cost= -(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
-    if(cost>-1)
-        cost=9+10*cost;
+    if(cost>-2)
+        cost=3*cost*cost+12*cost+10;
     return cost;
 }
 

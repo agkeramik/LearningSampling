@@ -35,7 +35,14 @@ FurnitureCatalog::FurnitureCatalog(const char *catalogFileName)
                     furniture.setHeight(atof(value.c_str()));
                 }else if (keyType.compare("depth")==0){
                     furniture.setDepth(atof(value.c_str()));
-                }
+                }else if (keyType.compare("positiveOffsetX")==0)
+                    furniture.setPositiveOffsetX(atof(value.c_str()));
+                else if (keyType.compare("positiveOffsetY")==0)
+                    furniture.setPositiveOffsetY(atof(value.c_str()));
+                else if (keyType.compare("negativeOffsetX")==0)
+                    furniture.setNegativeOffsetX(atof(value.c_str()));
+                else if (keyType.compare("negativeOffsetY")==0)
+                    furniture.setNegativeOffsetY(atof(value.c_str()));
             }
         }
     }

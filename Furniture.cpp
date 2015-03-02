@@ -6,6 +6,10 @@ Furniture::Furniture(int _id, std::string _catalogId):id(_id), catalogId(_catalo
     depth=10;
     width=10;
     height=10;
+    pOffX=0;
+    pOffY=0;
+    nOffX=0;
+    nOffY=0;
     this->updateGeometry();
 }
 
@@ -32,6 +36,15 @@ void Furniture::updateGeometry()
           <<ClipperLib::IntPoint((int)(-width/2.0),(int)(virDepth/2.0));
     if(!ClipperLib::Orientation(localPoly))
         ClipperLib::ReversePath(localPoly);
+
+    clearancePoly.clear();
+    clearancePoly<<ClipperLib::IntPoint((int)(-width/2.0-nOffX),(int)(-virDepth/2.0-nOffY))
+                <<ClipperLib::IntPoint((int)(width/2.0+pOffX),(int)(-virDepth/2.0-nOffY))
+               <<ClipperLib::IntPoint((int)(width/2.0+pOffX),(int)(virDepth/2.0+pOffY))
+              <<ClipperLib::IntPoint((int)(-width/2.0-nOffX),(int)(virDepth/2.0+pOffY));
+    if(!ClipperLib::Orientation(clearancePoly))
+        ClipperLib::ReversePath(clearancePoly);
+
 }
 
 void Furniture::setWidth(double width)
@@ -49,6 +62,30 @@ void Furniture::setHeight(double height)
 void Furniture::setDepth(double depth)
 {
     this->depth = depth;
+    this->updateGeometry();
+}
+
+void Furniture::setPositiveOffsetX(double off)
+{
+    pOffX=off;
+    this->updateGeometry();
+}
+
+void Furniture::setPositiveOffsetY(double off)
+{
+    pOffY=off;
+    this->updateGeometry();
+}
+
+void Furniture::setNegativeOffsetX(double off)
+{
+    nOffX=off;
+    this->updateGeometry();
+}
+
+void Furniture::setNegativeOffsetY(double off)
+{
+    nOffY=off;
     this->updateGeometry();
 }
 
@@ -72,6 +109,11 @@ void Furniture::setTheta(double theta)
 ClipperLib::Path Furniture::getGlobalGeometry() const
 {
     return ClipperLib::RotateTranslate(localPoly,features.at(0),features.at(1),features.at(2));
+}
+
+ClipperLib::Path Furniture::getClearanceGeometry() const
+{
+    return ClipperLib::RotateTranslate(clearancePoly,features.at(0),features.at(1),features.at(2));
 }
 
 bool Furniture::collision(const Furniture &f) const
