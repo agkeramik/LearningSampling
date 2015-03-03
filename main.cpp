@@ -135,14 +135,18 @@ int main(int argc, char* argv[])
 
     CostFunction evalFunction;
     CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
-    evalFunction.addComponent(*conv);
     CostCalculator *dist=new DistanceCostCalculator();
-    evalFunction.addComponent(*dist);
     CostCalculator *clearance=new ClearanceCostCalculator();
+
+    clearance->setWeight(5);
+    conv->setWeight(1);
+    dist->setWeight(1);
+    evalFunction.addComponent(*clearance);
+    evalFunction.addComponent(*conv);
 
     std::vector<Room> roomSamples;
     int *permIndex=new int[samples];
-    double *convCost=new double[samples];
+    double *costs=new double[samples];
     for (int i = 0; i < samples; ++i){
 
         Context ctx(room,furnCat,mixutures);
@@ -157,7 +161,6 @@ int main(int argc, char* argv[])
         }else{
             ctx.addFurnituresFromFile(argv[2]);
         }
-
         Furniture prex = ctx.catalog.getNewFurniture("Renouzate#TVTable");
         prex.setX(175);
         prex.setY(365);
@@ -171,27 +174,26 @@ int main(int argc, char* argv[])
         int w = sqrt(samples);
         int x = i % w;
         int y = i / w;
-
         //ctx.room.print(outputFile, x * 700, y * 700);
-
         permIndex[i]=i;
-        convCost[i]=clearance->calculateCost(ctx.room);
+        std::cout<<"Room "<<i<<std::endl;
+        costs[i]=evalFunction.calculateCost(ctx.room);
         roomSamples.push_back(ctx.room);
     }
 
-    for(int i=0;i<samples-1;++i){
-        for(int j=i+1;j<samples;++j){
-            if(convCost[permIndex[i]]>convCost[permIndex[j]]){
-                int temp=permIndex[i];
-                permIndex[i]=permIndex[j];
-                permIndex[j]=temp;
-            }
-        }
-    }
+//    for(int i=0;i<samples-1;++i){
+//        for(int j=i+1;j<samples;++j){
+//            if(costs[permIndex[i]]>costs[permIndex[j]]){
+//                int temp=permIndex[i];
+//                permIndex[i]=permIndex[j];
+//                permIndex[j]=temp;
+//            }
+//        }
+//    }
     for(int i=0;i<samples;++i){
-        std::cout<<"Room "<<i<<std::endl;
-        std::cout<<convCost[permIndex[i]];
-        std::cout<<std::endl;
+//        std::cout<<"Room "<<i<<std::endl;
+//        std::cout<<costs[permIndex[i]];
+//        std::cout<<std::endl;
         int w = sqrt(samples);
         int x = i % w;
         int y = i / w;
@@ -201,7 +203,8 @@ int main(int argc, char* argv[])
     outputFile<<"</Furnitures>\n";
     outputFile<<"</Room>\n";
     outputFile.close();
-    delete convCost;
+    delete clearance;
+    delete costs;
     delete conv;
     delete dist;
     delete permIndex;

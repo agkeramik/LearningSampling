@@ -60,7 +60,7 @@ double ConversationCostCalculator::calculateCost(Room &room)
             }
         }
     }
-    return cost;
+    return cost/furnitures.size();
 }
 
 void ConversationCostCalculator::print(std::ostream &out)
