@@ -15,11 +15,14 @@
 
 #include "Context.h"
 
+#include "CollisionCostCalculator.h"
 #include "ConversationCostCalculator.h"
 #include "DistanceCostCalculator.h"
 #include "CostCalculator.h"
 #include "CostFunction.h"
 #include "clearancecostcalculator.h"
+#include "balancecostcalculator.h"
+#include <stdlib.h>
 
 #include "clipper.hpp"
 
@@ -102,6 +105,57 @@ void cdfTest(){
     exit(0);
 }
 
+
+
+void walkFurniture(Furniture &f){
+    if(rand()%2==0)
+        f.setX(f.getX() + 4.0*rand()/RAND_MAX - 2.0);
+    else
+        f.setY(f.getY() + 4.0*rand()/RAND_MAX - 2.0);
+    if(rand()%10<3)
+        f.setTheta((f.getTheta() + 3.14/90*rand()/RAND_MAX - 3.14/180));
+}
+
+void optimize(Room &room, CostFunction &costFunction){
+    int cycles = 200;
+    vector<Furniture> &f = room.getFurnitures();
+
+    double lastCost = std::numeric_limits<double>::max();
+    for (int i = 0; i < cycles; ++i){
+
+        for (int j = 0; j < f.size(); ++j){
+            Furniture &furniture = f[j];
+            double ox = furniture.getX();
+            double oy = furniture.getY();
+            double ot = furniture.getTheta();
+            if (!furniture.isMovable())
+                continue;
+            walkFurniture(furniture);
+            double cost = costFunction.calculateCost(room);
+            if (cost < lastCost){
+                lastCost = cost;
+            }else{
+                furniture.setX(ox);
+                furniture.setY(oy);
+                furniture.setTheta(ot);
+            }
+
+            //std::cout << "cost = " << lastCost << std::endl;
+        }
+
+    }
+}
+
+
+int mainOld(){
+    //TODO test the difference algorithm
+    Room room;
+    room.setTopLeftCorner(0,0);
+    room.setBottomRightCorner(355,410);
+    cout<<room.getGeometry()<<endl;
+}
+
+
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
@@ -119,6 +173,8 @@ int main(int argc, char* argv[])
     FurnitureCatalog furnCat(prop.getFurnitureInfo().c_str());
     MGMM mixutures=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
     Room room;
+    room.setTopLeftCorner(0,0);
+    room.setBottomRightCorner(355,410);
     std::cout<<"before Door 1\n";
     Furniture door1=furnCat.getNewFurniture("eTeks#door");
     std::cout<<"after Door 1\n";
@@ -127,73 +183,93 @@ int main(int argc, char* argv[])
     door1.setTheta(4.71);
     room.addDoor(door1);
 
-    Furniture door2=furnCat.getNewFurniture("eTeks#doubleFrenchWindow126x200");
-    door2.setX(360);
-    door2.setY(330);
-    door2.setTheta(1.57);
-    room.addDoor(door2);
+//    Furniture door2=furnCat.getNewFurniture("eTeks#doubleFrenchWindow126x200");
+//    door2.setX(360);
+//    door2.setY(330);
+//    door2.setTheta(1.57);
+//    room.addDoor(door2);
+
+
+    CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
+    conv->setWeight(25.0);
+
+    CostCalculator *dist=new DistanceCostCalculator();
+    dist->setWeight(0.0);
+
+    CostCalculator *clearance=new ClearanceCostCalculator();
+    clearance->setWeight(200);
+
+    CostCalculator *collision = new CollisionCostCalculator();
+    collision->setWeight(100000);
+
+    CostCalculator *balance=new BalanceCostCalculator();
+    balance->setWeight(1);
 
     CostFunction evalFunction;
-    CostCalculator *conv=new ConversationCostCalculator(prop.getConversationProp().c_str());
-    CostCalculator *dist=new DistanceCostCalculator();
-    CostCalculator *clearance=new ClearanceCostCalculator();
-
-    clearance->setWeight(5);
-    conv->setWeight(1);
-    dist->setWeight(1);
+    evalFunction.addComponent(*balance);
     evalFunction.addComponent(*clearance);
+    //    evalFunction.addComponent(*dist);
     evalFunction.addComponent(*conv);
+    evalFunction.addComponent(*collision);
 
     std::vector<Room> roomSamples;
     int *permIndex=new int[samples];
-    double *costs=new double[samples];
+    double *convCost=new double[samples];
+
     for (int i = 0; i < samples; ++i){
 
         Context ctx(room,furnCat,mixutures);
         if (argc < 3){
             ctx.addFurnitureToList("Renouzate#Table3x2");
             ctx.addFurnitureToList("Renouzate#sofa2");
-            ctx.addFurnitureToList("Renouzate#sofa2");
+            ctx.addFurnitureToList("Renouzate#sofa1");
+            ctx.addFurnitureToList("Renouzate#sofa1");
             ctx.addFurnitureToList("Renouzate#armchair");
-            ctx.addFurnitureToList("Renouzate#armchair");
-            ctx.addFurnitureToList("Renouzate#Table1x1");
-            ctx.addFurnitureToList("Renouzate#Table1x1");
+            //            ctx.addFurnitureToList("Renouzate#Table1x1");
+            //            ctx.addFurnitureToList("Renouzate#Table1x1");
         }else{
             ctx.addFurnituresFromFile(argv[2]);
         }
+
         Furniture prex = ctx.catalog.getNewFurniture("Renouzate#TVTable");
         prex.setX(175);
         prex.setY(365);
         prex.setTheta(1.57);
+        prex.isMovable(false);
         ctx.room.addFurniture(prex);
 
         Sampler *sampler = new MGSampler(&ctx);
         sampler->furnish();
         delete sampler;
 
+
+        optimize(ctx.room, evalFunction);
+
         int w = sqrt(samples);
         int x = i % w;
         int y = i / w;
+
         //ctx.room.print(outputFile, x * 700, y * 700);
+
         permIndex[i]=i;
         std::cout<<"Room "<<i<<std::endl;
-        costs[i]=evalFunction.calculateCost(ctx.room);
+        convCost[i]=evalFunction.calculateCost(ctx.room);
         roomSamples.push_back(ctx.room);
     }
 
-//    for(int i=0;i<samples-1;++i){
-//        for(int j=i+1;j<samples;++j){
-//            if(costs[permIndex[i]]>costs[permIndex[j]]){
-//                int temp=permIndex[i];
-//                permIndex[i]=permIndex[j];
-//                permIndex[j]=temp;
-//            }
-//        }
-//    }
+    for(int i=0;i<samples-1;++i){
+        for(int j=i+1;j<samples;++j){
+            if(convCost[permIndex[i]]>convCost[permIndex[j]]){
+                int temp=permIndex[i];
+                permIndex[i]=permIndex[j];
+                permIndex[j]=temp;
+            }
+        }
+    }
     for(int i=0;i<samples;++i){
-//        std::cout<<"Room "<<i<<std::endl;
-//        std::cout<<costs[permIndex[i]];
-//        std::cout<<std::endl;
+        std::cout<<"Room "<<i<<std::endl;
+        std::cout<<convCost[permIndex[i]];
+        std::cout<<std::endl;
         int w = sqrt(samples);
         int x = i % w;
         int y = i / w;
@@ -203,10 +279,12 @@ int main(int argc, char* argv[])
     outputFile<<"</Furnitures>\n";
     outputFile<<"</Room>\n";
     outputFile.close();
-    delete clearance;
-    delete costs;
+
+    delete convCost;
     delete conv;
     delete dist;
+    delete balance;
+    delete collision;
     delete permIndex;
     return 0;
 }

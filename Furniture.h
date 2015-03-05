@@ -13,6 +13,7 @@ class Furniture
 {
     ClipperLib::Path localPoly;
     ClipperLib::Path clearancePoly;
+    bool is_Movable;
 
 public:
     int id;
@@ -28,13 +29,16 @@ public:
 
     void updateGeometry();
 
-	double getX();
-	double getY();
-	double getTheta();
+    bool isMovable() const;
+    void isMovable(bool movable);
 
-	void setX(double x);
-	void setY(double y);
-	void setTheta(double theta);
+    double getX() const;
+    double getY() const;
+    double getTheta() const ;
+
+    void setX(double x);
+    void setY(double y) ;
+    void setTheta(double theta);
     void setFeatureVector(arma::Col<double> vec);
 
     void setWidth(double width);

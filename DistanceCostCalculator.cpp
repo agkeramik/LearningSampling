@@ -54,10 +54,10 @@ DistanceCostCalculator::DistanceCostCalculator() : CostCalculator() {
 }
 
 
-double DistanceCostCalculator::calculateCost(Room &room){
+double DistanceCostCalculator::calculateCost(const Room &room){
     //give a weight for the pairwise relationship
     double cost = 0;
-    vector<Furniture> &furnitures = room.getFurnitures();
+    const vector<Furniture> &furnitures = room.getFurnitures();
     for(unsigned int i=0;i<furnitures.size()-1;++i){
         ClipperLib::Path pi = furnitures[i].getGlobalGeometry();
         for(unsigned int j=i+1;j<furnitures.size();++j){

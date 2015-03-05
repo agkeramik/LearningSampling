@@ -16,8 +16,8 @@ double CostFunction::calculateCost(Room &room)
     for(unsigned int i=0;i<components.size();++i){
         double c=components[i]->calculateCost(room);
         cost+=components[i]->getWeight()*c;
-        components[i]->print(std::cout);
-        std::cout<<"cost= "<<c<<" weight="<<components[i]->getWeight()<<std::endl;
+//        components[i]->print(std::cout);
+//        std::cout<<"cost= "<<c<<" weight="<<components[i]->getWeight()<<std::endl;
     }
     return cost;
 }

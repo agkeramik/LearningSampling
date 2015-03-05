@@ -9,7 +9,7 @@ class DistanceCostCalculator : public CostCalculator{
 
 public:
     DistanceCostCalculator();
-    virtual double calculateCost(Room &room);
+    virtual double calculateCost(const Room &room);
     double getSeverity();
     void setSeverity(double severtiy);
     double getStartRange();

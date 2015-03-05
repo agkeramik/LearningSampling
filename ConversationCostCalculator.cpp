@@ -3,7 +3,7 @@
 #include <math.h>
 #include <fstream>
 
-double ConversationCostCalculator::costFunction(Furniture &f1,Furniture &f2)
+double ConversationCostCalculator::costFunction(const Furniture &f1, const Furniture &f2)
 {
     double cost= -(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
     if(cost>-2)
@@ -11,7 +11,7 @@ double ConversationCostCalculator::costFunction(Furniture &f1,Furniture &f2)
     return cost;
 }
 
-double ConversationCostCalculator::cosineDeltaAngle(Furniture &f1, Furniture &f2)
+double ConversationCostCalculator::cosineDeltaAngle(const Furniture &f1, const Furniture &f2)
 {
     //assuming that f1,f2 centroids are resp. the positions of f1,f2
     //v is the vector going from f1's centroid towards f2's centroid
@@ -22,7 +22,7 @@ double ConversationCostCalculator::cosineDeltaAngle(Furniture &f1, Furniture &f2
     return f1Dir.dot(v)/sqrt(v.lengthSqrd()*f1Dir.lengthSqrd());
 }
 
-bool ConversationCostCalculator::goesInConvCost(Furniture &f)
+bool ConversationCostCalculator::goesInConvCost(const Furniture &f)
 {
     for(unsigned int i=0;i<furConv.size();++i)
         if(f.catalogId.compare(furConv[i])==0)
@@ -47,10 +47,10 @@ ConversationCostCalculator::ConversationCostCalculator(const char *fileName)
     fin.close();
 }
 
-double ConversationCostCalculator::calculateCost(Room &room)
+double ConversationCostCalculator::calculateCost(const Room &room)
 {
     double cost = 0;
-    vector<Furniture> &furnitures = room.getFurnitures();
+    const vector<Furniture> &furnitures = room.getFurnitures();
     for(unsigned int i=0; i<furnitures.size()-1;++i){
         if(goesInConvCost(furnitures[i])){
             for(unsigned int j=i+1;j<furnitures.size();++j){

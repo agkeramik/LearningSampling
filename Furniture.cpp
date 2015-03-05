@@ -3,6 +3,7 @@
 
 Furniture::Furniture(int _id, std::string _catalogId):id(_id), catalogId(_catalogId), features(3)
 {
+    is_Movable=true;
     depth=10;
     width=10;
     height=10;
@@ -47,6 +48,16 @@ void Furniture::updateGeometry()
 
 }
 
+bool Furniture::isMovable() const
+{
+    return is_Movable;
+}
+
+void Furniture::isMovable(bool movable)
+{
+    is_Movable=movable;
+}
+
 void Furniture::setWidth(double width)
 {
     this->width = width;
@@ -89,9 +100,9 @@ void Furniture::setNegativeOffsetY(double off)
     this->updateGeometry();
 }
 
-double Furniture::getX() { return this->features.at(0); }
-double Furniture::getY() { return this->features.at(1); }
-double Furniture::getTheta() { return this->features.at(2); }
+double Furniture::getX() const { return this->features.at(0); }
+double Furniture::getY() const { return this->features.at(1); }
+double Furniture::getTheta() const { return this->features.at(2); }
 
 void Furniture::setX(double x)
 {

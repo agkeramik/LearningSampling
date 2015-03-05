@@ -1,4 +1,5 @@
 #include "Global.h"
+#include <iostream>
 #include <cmath>
 
 double Global::intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2)
@@ -17,6 +18,19 @@ double Global::intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2)
 double Global::distanceSqrd(const ClipperLib::Path &p1, const ClipperLib::Path &p2)
 {
     return ClipperLib::MinimumDistanceCalipersSqrd(p1,p2);
+}
+
+double Global::differenceArea(const ClipperLib::Path &clip, const ClipperLib::Path &p)
+{
+    ClipperLib::Clipper clipper;
+    clipper.AddPath(p,ClipperLib::ptSubject,true);
+    clipper.AddPath(clip,ClipperLib::ptClip,true);
+    ClipperLib::Paths solution;
+    clipper.Execute(ClipperLib::ctDifference,solution);
+    if(solution.size()>0){
+        return abs(ClipperLib::Area(solution[0]));
+    }
+    return 0;
 }
 
 Vec2::Vec2(double _x,double _y):x(_x),y(_y)

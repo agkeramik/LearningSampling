@@ -1,10 +1,30 @@
 #include "room.h"
+#include "clipper.hpp"
+
+void Room::updateGeometry()
+{
+    geometry.clear();
+    geometry<<ClipperLib::IntPoint(tlX,tlY)
+           <<ClipperLib::IntPoint(tlX,brY)
+          <<ClipperLib::IntPoint(brX,brY)
+         <<ClipperLib::IntPoint(brX,tlY);
+}
 
 Room::Room()
 {
 }
 
+Vec2 Room::getCentroid() const
+{
+    return Vec2(0.5*(tlX+brX),0.5*(tlY+brY));
+}
+
 std::vector<Furniture> &Room::getFurnitures()
+{
+    return furnitures;
+}
+
+const std::vector<Furniture> &Room::getFurnitures() const
 {
     return furnitures;
 }
@@ -60,6 +80,7 @@ void Room::setBottomRightCorner(double X, double Y)
     //we are not checking any constraint
     brX=X;
     brY=Y;
+    updateGeometry();
 }
 
 void Room::setTopLeftCorner(double X, double Y)
@@ -67,6 +88,7 @@ void Room::setTopLeftCorner(double X, double Y)
     //we are not checking any constraint
     tlX=X;
     tlY=Y;
+    updateGeometry();
 }
 
 double Room::getTopLeftCornerX() const
@@ -87,6 +109,11 @@ double Room::getBottomRightCornerX() const
 double Room::getBottomRightCornerY() const
 {
     return brY;
+}
+
+const ClipperLib::Path &Room::getGeometry() const
+{
+    return geometry;
 }
 
 void Room::print(std::ostream &out, double xo, double yo) const

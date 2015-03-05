@@ -3,19 +3,23 @@
 
 #include <vector>
 #include <ostream>
-
+#include "Global.h"
 #include "Furniture.h"
 class Room
 {
     double tlX,tlY;//Top Left X. Top Left Y
     double brX,brY;
+    ClipperLib::Path geometry;
     std::vector<Furniture> furnitures;
     std::vector<Furniture> doors;
     std::vector<Furniture> windows;
+    void updateGeometry();
 
 public:
     Room();
+    Vec2 getCentroid() const;
     std::vector<Furniture> &getFurnitures();
+    const std::vector<Furniture> &getFurnitures() const;
     void addFurniture(Furniture &f);
     const std::vector<Furniture> &getDoors() const;
     void addDoor(Furniture &f);
@@ -28,6 +32,7 @@ public:
     double getTopLeftCornerY() const;
     double getBottomRightCornerX() const;
     double getBottomRightCornerY() const;
+    const ClipperLib::Path &getGeometry() const;
     void print(std::ostream &out, double xo, double yo) const;
     virtual ~Room();
 };

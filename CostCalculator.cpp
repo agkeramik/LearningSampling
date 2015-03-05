@@ -5,7 +5,7 @@ CostCalculator::CostCalculator()
 
 }
 
-double CostCalculator::calculateWeightedCost(Room &room)
+double CostCalculator::calculateWeightedCost(const Room &room)
 {
     return weight*calculateCost(room);
 }

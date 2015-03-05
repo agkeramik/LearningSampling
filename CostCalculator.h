@@ -13,8 +13,8 @@ protected:
 public:
     CostCalculator();
     virtual void print(std::ostream &out)=0;
-    virtual double calculateCost(Room &room)=0;
-    double calculateWeightedCost(Room &room);
+    virtual double calculateCost(const Room &room)=0;
+    double calculateWeightedCost(const Room &room);
     double getWeight();
     void setWeight(double weight);
     virtual ~CostCalculator();

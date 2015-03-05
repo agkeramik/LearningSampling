@@ -133,6 +133,9 @@ MGMM MGMM::learnMGMM(const char *fileName, const char *dataDirectory)
         if(it->second!=0){
             std::string dataFileName=std::string(dataDirectory)+it->first;
             arma::mat dat;
+
+            std::cout<<"Learning Models From dataFileName:"<<dataFileName<<std::endl;
+
             dat.load(dataFileName.c_str());
             dat=dat.t();
 
@@ -183,6 +186,7 @@ void MGMM::save(const char *directory) const
     for(GMMMap::const_iterator it=gmms.begin();it!=gmms.end();++it){
         if(it->second.second!=0){
             std::string gmmFileName=std::string(directory)+it->first+".xml";
+            std::cout<<"Saving GMM File"<<gmmFileName<<std::endl;
             it->second.first.Save(gmmFileName.c_str());
         }
     }

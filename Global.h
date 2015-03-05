@@ -10,6 +10,7 @@ class Global
 public:
     static double intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2);
     static double distanceSqrd(const ClipperLib::Path &p1, const ClipperLib::Path &p2);
+    static double differenceArea(const ClipperLib::Path &clip,const ClipperLib::Path &p);
 };
 
 class Vec2
@@ -17,7 +18,7 @@ class Vec2
 public:
     double x;
     double y;
-    Vec2(double _x, double _y);
+    Vec2(double _x=0, double _y=0);
     double lengthSqrd();
     double dot(const Vec2 &v);
 };

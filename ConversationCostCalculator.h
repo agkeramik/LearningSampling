@@ -8,12 +8,12 @@
 class ConversationCostCalculator : public CostCalculator{
     std::vector<std::string> furConv;
 public:
-    double costFunction(Furniture &f1, Furniture &f2);
-    double cosineDeltaAngle(Furniture &f1, Furniture &f2);
-    bool goesInConvCost(Furniture &f);
+    double costFunction(const Furniture &f1, const Furniture &f2);
+    double cosineDeltaAngle(const Furniture &f1, const Furniture &f2);
+    bool goesInConvCost(const Furniture &f);
 
     ConversationCostCalculator(const char *fileName);
-    virtual double calculateCost(Room &room);
+    virtual double calculateCost(const Room &room);
     virtual void print(std::ostream &out);
     virtual ~ConversationCostCalculator();
 };

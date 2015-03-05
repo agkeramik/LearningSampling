@@ -6,7 +6,7 @@ class ClearanceCostCalculator : public CostCalculator
 {
 public:
     ClearanceCostCalculator();
-    virtual double calculateCost(Room &room);
+    virtual double calculateCost(const Room &room);
     virtual void print(std::ostream &out);
     virtual ~ClearanceCostCalculator();
 };
