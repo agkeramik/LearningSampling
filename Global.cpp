@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 
-double Global::intersectionArea(ClipperLib::Path &p1, ClipperLib::Path &p2)
+double Global::intersectionArea(const ClipperLib::Path &p1, const ClipperLib::Path &p2)
 {
     ClipperLib::Clipper clipper;
     clipper.AddPath(p1,ClipperLib::ptSubject,true);

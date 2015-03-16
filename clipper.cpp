@@ -4157,12 +4157,6 @@ void SimplifyPolygons(Paths &polys, PolyFillType fillType)
 }
 //------------------------------------------------------------------------------
 
-inline double DistanceSqrd(const IntPoint& pt1, const IntPoint& pt2)
-{
-    double Dx = ((double)pt1.X - pt2.X);
-    double dy = ((double)pt1.Y - pt2.Y);
-    return (Dx*Dx + dy*dy);
-}
 //------------------------------------------------------------------------------
 
 double DistanceFromLineSqrd(

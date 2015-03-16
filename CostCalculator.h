@@ -6,8 +6,10 @@
 #include "Furniture.h"
 #include <ostream>
 
+class CostFunction;
 
 class CostCalculator {
+    std::vector<CostFunction*> functions;
 protected:
     double weight;
 public:
@@ -16,6 +18,8 @@ public:
     virtual double calculateCost(const Room &room)=0;
     double calculateWeightedCost(const Room &room);
     double getWeight();
+    void addFunction(CostFunction *f);
+    void removeFunction(CostFunction *f);
     void setWeight(double weight);
     virtual ~CostCalculator();
 };

@@ -34,7 +34,10 @@ void MGSampler::transformLocalToGlobal(arma::Col<double> &v, const arma::Col<dou
 bool MGSampler::accept(Furniture &f){
     std::vector<Furniture> &furnitures=context->room.getFurnitures();
 
-    if (f.getX()<0 || f.getX()>355 || f.getY()<0 || f.getY()>410)
+    if (f.getX()<context->room.getTopLeftCornerX() ||
+            f.getX()>context->room.getBottomRightCornerX() ||
+            f.getY()<context->room.getTopLeftCornerY() ||
+            f.getY()>context->room.getBottomRightCornerY())
         return false;
 
     DEBUG( "\tAccept Condition For:\n\t\t");DEBUG_LINE(f.getGlobalGeometry());

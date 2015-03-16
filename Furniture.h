@@ -48,7 +48,7 @@ public:
     void setPositiveOffsetY(double off);
     void setNegativeOffsetX(double off);
     void setNegativeOffsetY(double off);
-
+    double getSurface() const;
     ClipperLib::Path getGlobalGeometry() const;
     ClipperLib::Path getClearanceGeometry() const;
     bool collision(const Furniture &f) const;

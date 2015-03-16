@@ -1,13 +1,16 @@
 #ifndef COST_FUNCTION_H
 #define COST_FUNCTION_H
-
-#include "CostCalculator.h"
+#include <vector>
+#include "room.h"
+class CostCalculator;
 
 class CostFunction{
-    vector<CostCalculator *> components;
+    std::vector<CostCalculator *> components;
 public:
-    void addComponent(CostCalculator &cc);
+    void addComponent(CostCalculator *cc);
     void clearComponents();
+    void removeComponent(CostCalculator *c);
+    void print();
     double calculateCost(Room &room);
     virtual ~CostFunction();
 };

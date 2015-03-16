@@ -191,6 +191,13 @@ void OpenPathsFromPolyTree(PolyTree& polytree, Paths& paths);
 void ReversePath(Path& p);
 void ReversePaths(Paths& p);
 
+inline double DistanceSqrd(const IntPoint& pt1, const IntPoint& pt2)
+{
+    double Dx = ((double)pt1.X - pt2.X);
+    double dy = ((double)pt1.Y - pt2.Y);
+    return (Dx*Dx + dy*dy);
+}
+
 double DistanceFromSegmentSqrd(const IntPoint &seg1, const IntPoint &seg2, const IntPoint &p);
 double MinimumDistanceBFSqrd(const Path &p1, const Path &p2);
 double MinimumDistanceCalipersSqrd(const Path &p1, const Path &p2);

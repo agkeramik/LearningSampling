@@ -29,7 +29,7 @@ void Furniture::updateGeometry()
     double virDepth=depth;
     if(catalogId=="eTeks#door" || catalogId=="eTeks#doubleFrenchWindow126x200" ||
             catalogId=="eTeks#frenchWindow85x200")
-        virDepth=2*width;
+        virDepth=2*75;
     localPoly.clear();
     localPoly<<ClipperLib::IntPoint((int)(-width/2.0),(int)(-virDepth/2.0))
             <<ClipperLib::IntPoint((int)(width/2.0),(int)(-virDepth/2.0))
@@ -98,6 +98,11 @@ void Furniture::setNegativeOffsetY(double off)
 {
     nOffY=off;
     this->updateGeometry();
+}
+
+double Furniture::getSurface() const
+{
+    return width*depth;
 }
 
 double Furniture::getX() const { return this->features.at(0); }

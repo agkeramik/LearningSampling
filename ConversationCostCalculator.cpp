@@ -5,7 +5,7 @@
 
 double ConversationCostCalculator::costFunction(const Furniture &f1, const Furniture &f2)
 {
-    double cost= -(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
+    double cost= -(f1.width+f2.width)*(cosineDeltaAngle(f1,f2)+1)*(cosineDeltaAngle(f2,f1)+1);
     if(cost>-2)
         cost=3*cost*cost+12*cost+10;
     return cost;

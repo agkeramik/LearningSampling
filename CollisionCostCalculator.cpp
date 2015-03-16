@@ -19,9 +19,6 @@ double CollisionCostCalculator::calculateCost(const Room &room)
         }
     }
 
-    if(violationArea!=0){
-        std::cout<<"COLLISION!!!!\n";
-    }
     //check if there is any collision with the doors
     const vector<Furniture> &doors=room.getDoors();
     for(unsigned int i=0;i<furnitures.size();++i){
@@ -31,11 +28,14 @@ double CollisionCostCalculator::calculateCost(const Room &room)
             violationArea+=Global::intersectionArea(pi,pj);
         }
     }
-    //Checking if furniture is outside the room
+
+    //Check if furniture is outside the room
     const ClipperLib::Path &roomGeo=room.getGeometry();
     for (unsigned int i=0;i<furnitures.size();++i){
         ClipperLib::Path pi=furnitures[i].getGlobalGeometry();
-        violationArea+=Global::differenceArea(roomGeo,pi);
+        double area=Global::differenceArea(roomGeo,pi);
+//        std::cout<<"Area difference "<<furnitures[i].catalogId<<"= "<<area<<std::endl;
+        violationArea+=area;
     }
     return violationArea/10000;
 }
