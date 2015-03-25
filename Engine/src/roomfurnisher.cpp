@@ -30,7 +30,7 @@ RoomFurnisher::RoomFurnisher(RoomSampler *_rs, const Properties &props):
 
 std::vector<Room> RoomFurnisher::furnish(const Room &roomProp)
 {
-    const int samples=2;
+    const int samples=40;
     int *permIndex=new int[samples];
     double *cost=new double[samples];
 
