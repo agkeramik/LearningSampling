@@ -11,6 +11,8 @@ void Room::updateGeometry()
            <<ClipperLib::IntPoint(tlX,brY)
           <<ClipperLib::IntPoint(brX,brY)
          <<ClipperLib::IntPoint(brX,tlY);
+    if(!ClipperLib::Orientation(geometry))
+        ClipperLib::ReversePath(geometry);
 }
 
 Room::Room()

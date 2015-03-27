@@ -38,6 +38,8 @@ Message* MessageStreamWrapper::pullMessage()
     const int footerSize=10;
     char header[128];
     int recievedLen=receive(header,128);
+    //TODO
+    //check if receivedlen<0
 
     //parse header
     int messageLen=parseHeader(header);

@@ -106,6 +106,9 @@ double Furniture::getSurface() const
 double Furniture::getX() const { return this->features.at(0); }
 double Furniture::getY() const { return this->features.at(1); }
 double Furniture::getTheta() const { return this->features.at(2); }
+double Furniture::getWidth() const { return width;}
+double Furniture::getDepth() const {return depth;}
+double Furniture::getHeight() const {return height;}
 
 void Furniture::setX(double x)
 {

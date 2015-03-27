@@ -36,7 +36,7 @@ int main(int argc, char** argv)
                                 props.getGMMsFolder().c_str());
 
     RoomSampler *roomSampler=new RoomSampler(mixtures,*catalog);
-    RoomFurnisher *roomFurnisher=new RoomFurnisher(roomSampler,props);
+    RoomFurnisher *roomFurnisher=new RoomFurnisher(roomSampler,props,catalog);
 
     Dispatcher *dispatcher=new Dispatcher(roomFurnisher);
 

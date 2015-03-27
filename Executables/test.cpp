@@ -16,25 +16,13 @@ using namespace std;
 int main(){
     Properties props("properties.txt");
     FurnitureCatalog furnCat(props.getFurnitureInfo().c_str());
-    Furniture f=furnCat.getNewFurniture("Renouzate#sofa2");
-    f.setX(100);
-    f.setY(40);
-    f.setTheta(10);
-    Room room;
-    room.setBottomRightCorner(111,123);
-    room.setTopLeftCorner(1,2);
-    room.addFurniture(f);
+    Furniture f1=furnCat.getNewFurniture("Renouzate#sofa1");
+    f1.setX(0);
+    f1.setY(0);
+    f1.setTheta(0);
 
-    vector<Room> rooms;
-    rooms.push_back(room);
-    rooms.push_back(room);
-    ReplyFurnishMessage *message=new ReplyFurnishMessage();
-    message->setRooms(rooms);
-    cout<<message->toXML()<<endl<<endl;
+    Vec2 p=Global::centroid(f1.getGlobalGeometry());
+    cout<<p.x<<" "<<p.y<<endl;
 
-    Message* message1=Message::parse(message->toXML().c_str(),&furnCat);
 
-    cout<<message1->toXML()<<endl;
-    delete message;
-    delete message1;
 }

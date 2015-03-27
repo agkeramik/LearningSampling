@@ -96,21 +96,21 @@ int main(){
     FurnitureCatalog furnCat(prop.getFurnitureInfo().c_str());
     MGMM mixutures=MGMM::loadMGMM(prop.getFurnitureCount().c_str(),prop.getGMMsFolder().c_str());
     RoomSampler rs(mixutures,furnCat);
-    RoomFurnisher f(&rs,prop);
+    RoomFurnisher f(&rs,prop,&furnCat);
 
     //Building the room Properties
     Room room;
     room.setTopLeftCorner(0,0);
-    room.setBottomRightCorner(355,410);
+    room.setBottomRightCorner(370,410);
 
     Furniture door1=furnCat.getNewFurniture("eTeks#door");
     door1.setX(0);
-    door1.setY(360);
+    door1.setY(365);
     door1.setTheta(4.712);
     room.addDoor(door1);
 
     Furniture tv = furnCat.getNewFurniture("Renouzate#TVTable");
-    tv.setX(175);
+    tv.setX(185);
     tv.setY(380);
     tv.setTheta(1.57);
     tv.isMovable(false);

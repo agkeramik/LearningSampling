@@ -12,8 +12,9 @@
 
 #include <iostream>
 
-RoomFurnisher::RoomFurnisher(RoomSampler *_rs, const Properties &props):
-    rs(_rs)
+RoomFurnisher::RoomFurnisher(RoomSampler *_rs, const Properties &props,FurnitureCatalog *_catalog):
+    rs(_rs),
+    catalog(_catalog)
 {
     bs=new BayesianSampler();
     c=new CostComposite();
@@ -26,11 +27,12 @@ RoomFurnisher::RoomFurnisher(RoomSampler *_rs, const Properties &props):
     cc->addComponent(new BalanceCost(0.4));
     cc->addComponent(new ExpansionCost(40));
     opt=new RoomOptimiser(c);
+    sideTablePlacer=new SideTablePlacer(catalog);
 }
 
 std::vector<Room> RoomFurnisher::furnish(const Room &roomProp)
 {
-    const int samples=40;
+    const int samples=20;
     int *permIndex=new int[samples];
     double *cost=new double[samples];
 
@@ -39,19 +41,26 @@ std::vector<Room> RoomFurnisher::furnish(const Room &roomProp)
     for(int i=0;i<samples;++i){
         Room room(roomProp);
         rs->sample(&room,toAddList);
-        opt->optimise(room);
+
+        opt->optimise(room,100);
         CostComposite *cc=new CostComposite();
         Cost *alig=new FineAlignment(10,room);
         cc->addComponent(alig);
         cc->addComponent(c);
         RoomOptimiser alopt(cc);
-        alopt.optimise(room);
-        delete alig;
-        delete cc;
-        snapper->snapFurntiureAngles(room);
+        alopt.optimise(room,100);
+
         cost[i]=c->calculate(room);
         permIndex[i]=i;
+
+        snapper->snapFurntiureAngles(room);
+        sideTablePlacer->placeSideTable(room);
         roomSamples.push_back(room);
+        alopt.optimise(room,10);
+        snapper->snapFurntiureAngles(room);
+        delete alig;
+        delete cc;
+
     }
 
     //Sorting rooms
@@ -86,4 +95,5 @@ RoomFurnisher::~RoomFurnisher()
     c->cleanMemory();
     delete c;
     delete snapper;
+    delete sideTablePlacer;
 }
